@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap" rel="stylesheet">
+    <!-- CSS (Flask) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mantenimientos.css') }}">
+    <title>Entre Lineas - Inicio</title>
+</head>
+
+<body>
+    <script src="{{ url_for('static', filename='js/pais.js') }}"></script>
+    
+    <!-- Barra lateral -->
+    <aside>
+        <div class="barra-opciones">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='img/entre_lineas_logo.png') }}" alt="Logo Entre Lineas">
+            </div>
+
+            <div class="opciones">
+                <ul>
+                    <li>
+                        <a href="" class="opcion">
+                            <span class="material-symbols-outlined">home</span>Inicio
+                        </a>
+                    </li>
+                    <li>
+                        <a href="" class="opcion">
+                            <span class="material-symbols-outlined">build</span>Servicios
+                        </a>
+                    </li>
+                    <li>
+                        <a href="" class="opcion">
+                            <span class="material-symbols-outlined">mail</span>Contacto
+                        </a>
+                    </li>
+                    <li>
+                        <a href="" class="opcion">
+                            <span class="material-symbols-outlined">help</span>Ayuda
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Contenido principal -->
+    <div class="contenido-principal">
+        <div class="barra-titulo">
+            <div class="usuario">
+                <span class="material-symbols-outlined">account_circle</span>
+                <span>Usuario</span>
+                <button class="logout">Salir</button>
+            </div>
+        </div>
+
+        <div class="contenido">
+            <div class="crud-options">
+                <!-- <button id="mostrarTablaBtn" class="crud-buttons">
+                    <span class="material-symbols-outlined">table</span>
+                    Ver Países
+                </button> -->
+
+                <button id="agregarPaisBtn" class="crud-buttons">
+                    <span class="material-symbols-outlined">add</span>
+                    Agregar País 
+                </button>
+
+                <button id="editarPaisBtn" class="crud-buttons">
+                    <span class="material-symbols-outlined">edit</span>
+                    Editar País
+                </button>
+
+                <button id="eliminarPaisBtn" class="crud-buttons">
+                    <span class="material-symbols-outlined">delete</span>
+                    Eliminar País
+                </button>
+
+                <button class="crud-options">
+                    <span class="material-symbols-outlined">search</span>
+                    Buscar País
+                </button>
+            </div>
+
+            <!-- Tabla dinámica -->
+            <div id="tablaPaises" class="tabla-container hide">
+                <table class="tabla-paises">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre del País</th>
+                            <th>Código ISO</th>
+                            <th>Prefijo Telefono</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyPaises">
+                        <!-- Los datos se llenarán por JS -->
+                    </tbody>
+                </table>
+
+            </div>
+
+            <!-- Formulario para agregar país -->
+            <div id="formAgregarPais" class="form-container hide">
+                <h3>Nuevo País</h3>
+                <form id="paisForm">
+                    <label for="paisid">ID (ISO alpha-3):</label>
+                    <input type="text" id="paisid" name="paisid" maxlength="3" required>
+
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" required>
+
+                    <label for="codigo_numerico">Código numérico:</label>
+                    <input type="number" id="codigo_numerico" name="codigo_numerico">
+
+                    <label for="prefijo_telefono">Prefijo telefónico:</label>
+                    <input type="text" id="prefijo_telefono" name="prefijo_telefono">
+
+                    <button type="submit">Guardar</button>
+                    <button type="button" class="cancelarBtn">Cancelar</button>
+                </form>
+            </div>
+
+            <!-- Formulario para editar país -->
+            <div id="formEditarPais" class="form-container hide">
+                <h3>Editar País</h3>
+                
+                <div id="busquedaEditarPais" class="form-container hide">
+                    <input type="text" id="buscarNombrePais" placeholder="Buscar país por nombre...">
+                    <button id="btnBuscarPais">Buscar</button>
+                </div>
+                
+                <form id="paisForm">
+                    <label for="paisid">ID (ISO alpha-3):</label>
+                    <input type="text" id="paisid" name="paisid" maxlength="3" required>
+
+                    <label for="nombre">Nombre:</label>
+                    <input type="text" id="nombre" name="nombre" required>
+
+                    <label for="codigo_numerico">Código numérico:</label>
+                    <input type="number" id="codigo_numerico" name="codigo_numerico">
+
+                    <label for="prefijo_telefono">Prefijo telefónico:</label>
+                    <input type="text" id="prefijo_telefono" name="prefijo_telefono">
+
+                    <button type="submit">Guardar</button>
+                    <button type="button" class="cancelarBtn">Cancelar</button>
+                </form>
+            </div>
+
+            <!-- Formulario para eliminar país -->
+            <div id="formEliminarPais" class="form-container hide">
+                <h3>Eliminar País</h3>
+                <form id="eliminarPaisForm">
+                    <label for="eliminarPaisId">ID (ISO alpha-3) o nombre:</label>
+                    <input type="text" id="eliminarPaisId" name="eliminarPaisId" required>
+                    <button type="submit">Eliminar</button>
+                    <button type="button" class="cancelarBtn">Cancelar</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,58 @@
+body{
+    display: flex;
+}
+
+.barra-opciones .opciones ul{
+    list-style-type: none;
+}
+
+aside{
+    background-color: #f0f0f0;
+}
+
+.hide {
+    display: none;
+}
+
+.tabla-paises {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.tabla-paises th, .tabla-paises td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+}
+
+.paginacion {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.paginacion button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    background-color: #007BFF; /* azul claro */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.paginacion button:hover {
+    background-color: #0056b3; /* azul más oscuro al pasar el mouse */
+}
+
+.paginacion button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.form-container.hide {
+    display: none;
+}
