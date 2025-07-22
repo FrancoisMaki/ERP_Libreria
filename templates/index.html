@@ -5,79 +5,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap" />
-    <link rel="stylesheet" href="../static/css/index.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
     <title>Entre Lineas - Inicio</title>
 </head>
 
 <body>
-    
     <!--Barra de Opciones-->
-    <aside>
+    <aside id="sidebar" class="sidebar expanded">
         <div class="barra-opciones">
-            
+            <!--Botón para expandir/contraer-->
+            <button id="toggleSidebar" class="toggle-sidebar" aria-label="Expandir/Contraer menú">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
             <!--Logo-->
             <div class="logo">
-                <img src="../static/img/entre_lineas_logo.png" alt="Logo Entre Lineas">
+                <img src="{{ url_for('static', filename='img/entre_lineas_logo.png') }}" alt="Logo Entre Lineas">
             </div>
-
             <!--Opciones de Navegación-->
             <div class="opciones">
                 <ul>
                     <li>
-                        <a href="/cliente/index.html" class="opcion">
+                        <a href="#" class="opcion">
                             <span class="material-symbols-outlined">home</span>
-                            Inicio
+                            <span class="texto">Inicio</span>
                         </a>
                     </li>
-                    
-
-                <li>
-                    <a href="/cliente/servicios.html" class="opcion">
-                        <span class="material-symbols-outlined">build</span>
-                        Servicios
-                    </a>
-                </li>
-
-                <li>
-                    <a href="/cliente/contacto.html" class="opcion">
-                        <span class="material-symbols-outlined">mail</span>
-                        Contacto
-                    </a>
-                </li>
-                
-                <li>
-                    <a href="/cliente/ayuda.html" class="opcion">
-                        <span class="material-symbols-outlined">help</span>
-                        Ayuda
-                    </a>    
-                </li>
-
+                    <li>
+                        <a href="#" class="opcion">
+                            <span class="material-symbols-outlined">build</span>
+                            <span class="texto">Servicios</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="opcion">
+                            <span class="material-symbols-outlined">mail</span>
+                            <span class="texto">Contacto</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="opcion">
+                            <span class="material-symbols-outlined">help</span>
+                            <span class="texto">Ayuda</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
-
         </div>
     </aside>
 
     <!--Contenido Principal-->
-    <div>
+    <div class="main-content">
         <!--Barra de Título-->
         <div class="barra-titulo">
             <div class="usuario">
                 <span class="material-symbols-outlined">account_circle</span>
                 <span>Usuario</span>
-                <button class="logut">Salir</button>
+                <button class="logout">Salir</button>
             </div>
         </div>
-
         <!--Contenido-->
         <div class="contenido">
             <h1>Bienvenido a Entre Líneas</h1>
             <p>Explora nuestros servicios y descubre cómo podemos ayudarte.</p>
-            <img src="../../static/img/entre_lineas_banner.png" alt="Banner Entre Lineas" class="banner">
+            <img src="" alt="Banner Entre Lineas" class="banner">
         </div>
     </div>
-
-
+    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
 </body>
-
 </html>

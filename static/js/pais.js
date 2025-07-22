@@ -150,6 +150,58 @@ document.addEventListener("DOMContentLoaded", () => {
     btnAgregar.addEventListener("click", manejarAccion);
     btnEditar.addEventListener("click", manejarAccion);
 
+        // Delegación de eventos en la tabla para editar y eliminar
+    tbody.addEventListener('click', function(event) {
+        const btn = event.target;
+        if (btn.tagName !== 'BUTTON') return;
+        const fila = btn.closest('tr');
+        const paisid = fila.children[0].textContent;
+        const nombre = fila.children[1].textContent;
+        const codigo_numerico = fila.children[2].textContent;
+        const prefijo_telefono = fila.children[3].textContent;
+
+        // Si es botón Editar, muestra el form de editar y rellena los datos
+        if (btn.textContent === 'Editar') {
+            // Oculta todo y muestra solo el editar
+            formAgregarDiv.classList.add("hide");
+            formAgregarForm.classList.add("hide");
+            formEliminarDiv.classList.add("hide");
+            eliminarPaisForm.classList.add("hide");
+            tablaContainer.classList.add("hide");
+            togglePaginacion(false);
+
+            formEditarDiv.classList.remove("hide");
+            formEditarForm.classList.remove("hide");
+            formBuscarPaisDiv.classList.add("hide"); // Si quieres ocultar buscador aquí
+
+            // Rellena el form de editar
+            formEditarForm.paisid.value = paisid;
+            formEditarForm.nombre.value = nombre;
+            formEditarForm.codigo_numerico.value = codigo_numerico;
+            formEditarForm.prefijo_telefono.value = prefijo_telefono;
+
+            btnEditar.disabled = true;
+            btnAgregar.disabled = false;
+            btnEliminar.disabled = false;
+        }
+
+        // Si es botón Eliminar, pregunta y elimina
+        if (btn.textContent === 'Eliminar') {
+            if (!window.confirm(`¿Estás seguro que deseas eliminar el país "${nombre}" (ID: ${paisid})? Esta acción no se puede deshacer.`)) {
+                return;
+            }
+            fetch(`${API_BASE}${paisid}`, { method: "DELETE" })
+                .then(res => {
+                    if (!res.ok) throw new Error("No se encontró el país o no se pudo eliminar");
+                    alert("País eliminado correctamente");
+                    cargarPagina(paginaActual);
+                })
+                .catch(err => {
+                    alert("Error al eliminar país: " + err.message);
+                });
+        }
+    });
+
     document.querySelectorAll('.cancelarBtn').forEach(btn => {
         btn.addEventListener("click", () => {
             formAgregarDiv.classList.add("hide");
@@ -331,4 +383,5 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert("Error al eliminar país: " + err.message);
             });
     });
+
 });

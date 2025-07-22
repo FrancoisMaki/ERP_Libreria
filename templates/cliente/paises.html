@@ -10,12 +10,15 @@
     <title>Entre Lineas - Inicio</title>
 </head>
 
-<body>
-    <script src="{{ url_for('static', filename='js/pais.js') }}"></script>
-    
+<body>    
     <!-- Barra lateral -->
-    <aside>
+    <aside id="sidebar" class="sidebar expanded">
         <div class="barra-opciones">
+            <!-- Botón para expandir/contraer -->
+            <button id="toggleSidebar" class="toggle-sidebar" aria-label="Expandir/Contraer menú">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+
             <div class="logo">
                 <img src="{{ url_for('static', filename='img/entre_lineas_logo.png') }}" alt="Logo Entre Lineas">
             </div>
@@ -23,23 +26,27 @@
             <div class="opciones">
                 <ul>
                     <li>
-                        <a href="" class="opcion">
-                            <span class="material-symbols-outlined">home</span>Inicio
+                        <a href="#" class="opcion">
+                            <span class="material-symbols-outlined">home</span>
+                            <span class="texto">Inicio</span>
                         </a>
                     </li>
                     <li>
-                        <a href="" class="opcion">
-                            <span class="material-symbols-outlined">build</span>Servicios
+                        <a href="#" class="opcion">
+                            <span class="material-symbols-outlined">build</span>
+                            <span class="texto">Servicios</span>
                         </a>
                     </li>
                     <li>
-                        <a href="" class="opcion">
-                            <span class="material-symbols-outlined">mail</span>Contacto
+                        <a href="#" class="opcion">
+                            <span class="material-symbols-outlined">mail</span>
+                            <span class="texto">Contacto</span>
                         </a>
                     </li>
                     <li>
-                        <a href="" class="opcion">
-                            <span class="material-symbols-outlined">help</span>Ayuda
+                        <a href="#" class="opcion">
+                            <span class="material-symbols-outlined">help</span>
+                            <span class="texto">Ayuda</span>
                         </a>
                     </li>
                 </ul>
@@ -48,7 +55,7 @@
     </aside>
 
     <!-- Contenido principal -->
-    <div class="contenido-principal">
+    <div class="main-content">
         <div class="barra-titulo">
             <div class="usuario">
                 <span class="material-symbols-outlined">account_circle</span>
@@ -165,6 +172,9 @@
 
         </div>
     </div>
+
+    <script src="{{ url_for('static', filename='js/pais.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
 
 </body>
 
