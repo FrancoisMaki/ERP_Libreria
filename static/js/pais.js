@@ -102,8 +102,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnEliminar = document.getElementById("eliminarPaisBtn");
 
     const btnCancelar = document.getElementById("cancelarBtn");
+    
     const buscarInput = document.getElementById("buscarNombrePais");
     const btnBuscarPais = document.getElementById("btnBuscarPais");
+
     const formBuscarPaisDiv = document.getElementById("busquedaEditarPais");
 
     function manejarAccion(event) {
@@ -113,6 +115,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 formEditarForm.classList.add("hide");
                 formBuscarPaisDiv.classList.add("hide");
 
+                formEliminarDiv.classList.add("hide");
+                eliminarPaisForm.classList.add("hide");
+
                 formAgregarDiv.classList.remove("hide");
                 formAgregarForm.classList.remove("hide");
 
@@ -121,12 +126,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 
                 btnAgregar.disabled = true;
                 btnEditar.disabled = false;
+                btnEliminar.disabled = false;
 
                 break;
 
             case 'editarPaisBtn':
                 formAgregarDiv.classList.add("hide");
                 formAgregarForm.classList.add("hide");
+
+                formEliminarDiv.classList.add("hide");
+                eliminarPaisForm.classList.add("hide");
 
                 formEditarDiv.classList.remove("hide");
                 formEditarForm.classList.remove("hide");
@@ -137,8 +146,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 btnEditar.disabled = true;
                 btnAgregar.disabled = false;
+                btnEliminar.disabled = false;
             
                 break;
+
+            case 'eliminarPaisBtn':
+                formAgregarDiv.classList.add("hide");
+                formAgregarForm.classList.add("hide");
+
+                formEditarDiv.classList.add("hide");
+                formEditarForm.classList.add("hide");
+                formBuscarPaisDiv.classList.add("hide");
+
+                formEliminarDiv.classList.remove("hide");
+                eliminarPaisForm.classList.remove("hide");
+
+                tablaContainer.classList.add("hide");
+                togglePaginacion(false);
+
+                btnEliminar.disabled = true;
+                btnAgregar.disabled = false;
+                btnEditar.disabled = false;
 
             default:
                 console.log('Acción desconocida');
@@ -149,6 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Asígnalo a los dos botones principales
     btnAgregar.addEventListener("click", manejarAccion);
     btnEditar.addEventListener("click", manejarAccion);
+    btnEliminar.addEventListener("click", manejarAccion);
 
         // Delegación de eventos en la tabla para editar y eliminar
     tbody.addEventListener('click', function(event) {

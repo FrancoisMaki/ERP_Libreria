@@ -18,11 +18,11 @@
             <button id="toggleSidebar" class="toggle-sidebar" aria-label="Expandir/Contraer menú">
                 <span class="material-symbols-outlined">menu</span>
             </button>
-
+    
             <div class="logo">
                 <img src="{{ url_for('static', filename='img/entre_lineas_logo.png') }}" alt="Logo Entre Lineas">
             </div>
-
+    
             <div class="opciones">
                 <ul>
                     <li>
@@ -32,21 +32,46 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="opcion">
-                            <span class="material-symbols-outlined">build</span>
-                            <span class="texto">Servicios</span>
+                        <a href="#" id="mantenimientoBtn" class="opcion mantenimiento-toggle">
+                            <span class="material-symbols-outlined">inventory</span>
+                            <span class="texto">Mantenimiento</span>
+                            <span class="material-symbols-outlined flecha-dropdown" id="flechaDropdown">expand_more</span>
                         </a>
+                        <ul class="dropdown hide" id="mantenimientoDropdown">
+                            <li><a href="">Países</a></li>
+                            <li><a href="">Provincias</a></li>
+                            <li><a href="">Poblaciones</a></li>
+                            <li><a href="">Empresas</a></li>
+                            <li><a href="">Clientes</a></li>
+                            <li><a href="">Proveedores</a></li>
+                            <li><a href="">Categorías</a></li>
+                            <li><a href="">Autores</a></li>
+                            <li><a href="">Almacenes</a></li>
+                        </ul>
                     </li>
+                    
                     <li>
                         <a href="#" class="opcion">
-                            <span class="material-symbols-outlined">mail</span>
-                            <span class="texto">Contacto</span>
+                            <span class="material-symbols-outlined">payments</span>
+                            <span class="texto">Ventas</span>
                         </a>
                     </li>
                     <li>
                         <a href="#" class="opcion">
                             <span class="material-symbols-outlined">help</span>
-                            <span class="texto">Ayuda</span>
+                            <span class="texto">Compras</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="opcion">
+                            <span class="material-symbols-outlined">store</span>
+                            <span class="texto">Almacen</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="opcion">
+                            <span class="material-symbols-outlined">analytics</span>
+                            <span class="texto">Estadísticas</span>
                         </a>
                     </li>
                 </ul>
@@ -86,7 +111,7 @@
                     Eliminar País
                 </button>
 
-                <button class="crud-options">
+                <button id="buscarPaisBtn" class="crud-buttons">
                     <span class="material-symbols-outlined">search</span>
                     Buscar País
                 </button>
@@ -169,6 +194,7 @@
                     <button type="button" class="cancelarBtn">Cancelar</button>
                 </form>
             </div>
+
 
         </div>
     </div>

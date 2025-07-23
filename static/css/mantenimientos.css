@@ -334,3 +334,53 @@ body {
         margin-top: 10px;
     }
 }
+
+/* DROPDOWN SUBLISTA */
+.dropdown {
+    background: #222;
+    margin-left: 45px;
+    padding: 8px 0 8px 10px;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 2px 10px #0002;
+    transition: max-height 0.25s, opacity 0.2s;
+    max-height: 500px;
+    opacity: 1;
+    overflow: hidden;
+}
+.dropdown.hide {
+    max-height: 0;
+    opacity: 0;
+    padding: 0 0 0 10px;
+}
+.dropdown li {
+    margin: 7px 0;
+}
+.dropdown a {
+    color: #fff;
+    text-decoration: none;
+    padding: 4px 12px;
+    border-radius: 4px;
+    display: block;
+    transition: background 0.15s;
+}
+.dropdown a:hover {
+    background: #444;
+}
+
+/* Flecha para el dropdown */
+.flecha-dropdown {
+    margin-left: auto;
+    transition: transform 0.2s;
+}
+.mantenimiento-open .flecha-dropdown {
+    transform: rotate(180deg);
+}
+
+/* Cuando sidebar está contraido, oculta el dropdown */
+.sidebar.contraido .dropdown {
+    display: none !important;
+}
+
+.sidebar.contraido .flecha-dropdown {
+    display: none !important;
+}
