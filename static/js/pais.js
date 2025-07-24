@@ -1,28 +1,44 @@
 document.addEventListener("DOMContentLoaded", () => {
-
     const API_BASE = "/cliente/api/paises/";
 
+    // Variables y elementos globales
     const tablaContainer = document.getElementById("tablaPaises");
     const tbody = document.getElementById("tbodyPaises");
     const paginacionContainer = document.createElement("div");
     paginacionContainer.classList.add("paginacion");
     tablaContainer.after(paginacionContainer);
+    const porPagina = 10;
+    let paginaActual = 1;
+    let nombreBusqueda = "";
+
+    // Input de búsqueda y botón
+    const buscarNombreInput = document.getElementById("buscarNombreInput");
+    const buscarNombreBtn = document.getElementById("buscarNombreBtn");
+
+    // Buscar por nombre (LIKE)
+    buscarNombreBtn.addEventListener("click", () => {
+        nombreBusqueda = buscarNombreInput.value.trim();
+        paginaActual = 1;
+        cargarPagina(paginaActual);
+    });
 
     const togglePaginacion = mostrar => {
         paginacionContainer.style.display = mostrar ? "flex" : "none";
     };
 
-    let paginaActual = 1;
-    const porPagina = 10;
-
+    // Función principal de carga y paginación
     const cargarPagina = (pagina) => {
-        fetch(`${API_BASE}?pagina=${pagina}&por_pagina=${porPagina}`)
+        let url = `${API_BASE}?pagina=${pagina}&por_pagina=${porPagina}`;
+        if (nombreBusqueda) {
+            url += `&nombre=${encodeURIComponent(nombreBusqueda)}`;
+        }
+        fetch(url)
             .then(res => {
                 if (!res.ok) throw new Error("Error al cargar países");
                 return res.json();
             })
             .then(data => {
-                tbody.innerHTML = ''; // Limpiar la tabla
+                tbody.innerHTML = '';
                 const paises = data.paises || [];
                 const totalPaginas = data.total_paginas || 1;
 
@@ -73,8 +89,12 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             .catch(error => {
                 console.error("Error al cargar países:", error);
+                tbody.innerHTML = '<tr><td colspan="5">Error al cargar países.</td></tr>';
             });
     };
+
+    // Inicializa tabla al cargar
+    cargarPagina(paginaActual);
 
     // Mostrar tabla
     const btnMostrar = document.getElementById("mostrarTablaBtn");
@@ -172,14 +192,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.log('Acción desconocida');
         }
     }
-
     
     // Asígnalo a los dos botones principales
     btnAgregar.addEventListener("click", manejarAccion);
     btnEditar.addEventListener("click", manejarAccion);
     btnEliminar.addEventListener("click", manejarAccion);
 
-        // Delegación de eventos en la tabla para editar y eliminar
+    // Delegación de eventos en la tabla para editar y eliminar
     tbody.addEventListener('click', function(event) {
         const btn = event.target;
         if (btn.tagName !== 'BUTTON') return;
@@ -194,8 +213,10 @@ document.addEventListener("DOMContentLoaded", () => {
             // Oculta todo y muestra solo el editar
             formAgregarDiv.classList.add("hide");
             formAgregarForm.classList.add("hide");
+
             formEliminarDiv.classList.add("hide");
             eliminarPaisForm.classList.add("hide");
+
             tablaContainer.classList.add("hide");
             togglePaginacion(false);
 
@@ -285,10 +306,16 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .then(data => {
             alert("País agregado correctamente");
+            
             formAgregarForm.reset();
             formAgregarDiv.classList.add("hide");
-            btnAgregar.disabled = false;
+            formAgregarForm.classList.add("hide");
+
+            tablaContainer.classList.remove("hide");
             togglePaginacion(true);
+
+            btnAgregar.disabled = false;
+
             cargarPagina(1);
         })
         .catch(err => {
@@ -350,11 +377,17 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .then(data => {
             alert("País actualizado correctamente");
+
             formEditarForm.reset();
             formEditarDiv.classList.add("hide");
+            formEditarForm.classList.add("hide");
+            formBuscarPaisDiv.classList.add("hide");
+
             tablaContainer.classList.remove("hide");
             togglePaginacion(true);
+
             btnEditar.disabled = false;
+
             cargarPagina(1);
         })
         .catch(err => {
@@ -401,11 +434,16 @@ document.addEventListener("DOMContentLoaded", () => {
             .then(res => {
                 if (!res.ok) throw new Error("No se encontró el país o no se pudo eliminar");
                 alert("País eliminado correctamente");
+
                 eliminarPaisForm.reset();
                 formEliminarDiv.classList.add("hide");
+                eliminarPaisForm.classList.add("hide");
+
                 tablaContainer.classList.remove("hide");
                 togglePaginacion(true);
+
                 btnEliminar.disabled = false;
+                
                 cargarPagina(1);
             })
             .catch(err => {

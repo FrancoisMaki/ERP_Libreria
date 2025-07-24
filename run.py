@@ -8,6 +8,10 @@ app = Flask(__name__)
 app.register_blueprint(cliente_bp, url_prefix='/cliente')
 app.register_blueprint(pais_bp, url_prefix='/cliente')  # mismo prefijo para mantener API en mismo espacio
 
+@app.route('/paises')
+def paises():
+    return render_template('/cliente/paises.html')
+
 @app.route('/')
 def index():
     return render_template('index.html')

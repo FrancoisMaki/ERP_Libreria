@@ -26,7 +26,7 @@
             <div class="opciones">
                 <ul>
                     <li>
-                        <a href="#" class="opcion">
+                        <a href="{{ url_for('index') }}" class="opcion">
                             <span class="material-symbols-outlined">home</span>
                             <span class="texto">Inicio</span>
                         </a>
@@ -39,7 +39,7 @@
                             <span class="material-symbols-outlined flecha-dropdown" id="flechaDropdown">expand_more</span>
                         </a>
                         <ul class="dropdown hide" id="mantenimientoDropdown">
-                            <li><a href="">Países</a></li>
+                            <li><a href="{{ url_for('paises') }}">Paises</a></li>
                             <li><a href="">Provincias</a></li>
                             <li><a href="">Poblaciones</a></li>
                             <li><a href="">Empresas</a></li>
@@ -134,15 +134,12 @@
                     <span class="material-symbols-outlined">delete</span>
                     Eliminar País
                 </button>
-
-                <button id="buscarPaisBtn" class="crud-buttons">
-                    <span class="material-symbols-outlined">search</span>
-                    Buscar País
-                </button>
             </div>
 
             <!-- Tabla dinámica -->
             <div id="tablaPaises" class="tabla-container hide">
+                <input type="text" id="buscarNombreInput" placeholder="Buscar país por nombre...">
+                <button id="buscarNombreBtn">Buscar</button>
                 <table class="tabla-paises">
                     <thead>
                         <tr>

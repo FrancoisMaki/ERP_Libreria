@@ -3,42 +3,6 @@ from models.db import get_connection
 
 pais_bp = Blueprint('pais', __name__)
 
-@pais_bp.route('/api/paises/', methods=['GET'])
-def api_paises():
-    page = int(request.args.get('page', 1))
-    per_page = int(request.args.get('per_page', 10))
-    offset = (page - 1) * per_page
-
-    conn = get_connection()
-    if conn is None:
-        return jsonify({"error": "No se pudo conectar a la base de datos"}), 500
-
-    try:
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT COUNT(*) as total FROM pais")
-        total = cursor.fetchone()['total']
-
-        cursor.execute("""
-            SELECT paisid, nombre, codigo_numerico, prefijo_telefono
-            FROM pais 
-            LIMIT %s OFFSET %s
-        """, (per_page, offset))
-        paises = cursor.fetchall()
-
-        return jsonify({
-            "total": total,
-            "page": page,
-            "per_page": per_page,
-            "paises": paises
-        })
-    except Exception as e:
-        print(f"❌ Error en la consulta: {e}")
-        return jsonify({"error": "Error en la consulta"}), 500
-    finally:
-        cursor.close()
-        conn.close()
-
-
 @pais_bp.route('/api/paises/', methods=['POST'])
 def agregar_pais():
     conn = get_connection()
@@ -154,6 +118,54 @@ def eliminar_pais(paisid):
     except Exception as e:
         print(f"❌ Error al eliminar país: {e}")
         return jsonify({"error": "Error al eliminar país"}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+@pais_bp.route('/api/paises/', methods=['GET'])
+def api_paises():
+    page = int(request.args.get('pagina', 1))
+    per_page = int(request.args.get('por_pagina', 10))
+    nombre = request.args.get('nombre', '').strip()
+    offset = (page - 1) * per_page
+
+    conn = get_connection()
+    if conn is None:
+        return jsonify({"error": "No se pudo conectar a la base de datos"}), 500
+
+    try:
+        cursor = conn.cursor(dictionary=True)
+        params = []
+        filtro = ""
+        if nombre:
+            # Solo países cuyo nombre empieza con 'nombre' (mayúsculas/minúsculas)
+            filtro = "WHERE UPPER(nombre) LIKE CONCAT(UPPER(%s), '%')"
+            params.append(nombre)
+
+        cursor.execute(f"SELECT COUNT(*) as total FROM pais {filtro}", params)
+        total = cursor.fetchone()['total']
+
+        params.extend([per_page, offset])
+        cursor.execute(f"""
+            SELECT paisid, nombre, codigo_numerico, prefijo_telefono
+            FROM pais
+            {filtro}
+            LIMIT %s OFFSET %s
+        """, params)
+        paises = cursor.fetchall()
+
+        total_paginas = (total + per_page - 1) // per_page
+
+        return jsonify({
+            "total": total,
+            "pagina": page,
+            "por_pagina": per_page,
+            "total_paginas": total_paginas,
+            "paises": paises
+        })
+    except Exception as e:
+        print(f"❌ Error en la consulta: {e}")
+        return jsonify({"error": "Error en la consulta"}), 500
     finally:
         cursor.close()
         conn.close()
