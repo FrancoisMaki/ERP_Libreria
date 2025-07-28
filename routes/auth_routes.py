@@ -21,7 +21,7 @@ def login():
             session['nombre_usuario'] = user['nombre_usuario']
             session['rol'] = user['rol']
             session['nombre'] = user['nombre_usuario']
-            return redirect(url_for('cliente.mostrar_paises'))
+            return redirect(url_for('index'))
         else:
             error = "Usuario o contraseña incorrectos"
     return render_template('login.html', error=error)
