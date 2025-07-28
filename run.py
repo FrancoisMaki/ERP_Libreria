@@ -7,7 +7,8 @@ from routes.codigo_postal_routes import codigo_postal_bp
 from routes.cliente_routes import cliente_bp
 from routes.empresa_routes import empresa_bp
 from routes.proveedor_routes import proveedor_bp
-from routes.categoria_routes import categoria_bp    
+from routes.categoria_routes import categoria_bp   
+from routes.autor_routes import autor_bp 
 from routes.auth_routes import auth_bp
 from utils.auth import login_required
 import os
@@ -28,6 +29,8 @@ app.register_blueprint(cliente_bp, url_prefix='/api')
 app.register_blueprint(empresa_bp, url_prefix='/api')
 app.register_blueprint(proveedor_bp, url_prefix='/api')
 app.register_blueprint(categoria_bp, url_prefix='/api')
+app.register_blueprint(autor_bp, url_prefix='/api')
+
 app.register_blueprint(auth_bp)
 
 @app.route('/')
@@ -66,6 +69,10 @@ def proveedores():
 @app.route('/categorias')
 def categorias():
     return render_template('cliente/categorias.html', css_file='css/mantenimientos.css')
+
+@app.route('/autores')
+def autores():
+    return render_template('cliente/autores.html', css_file='css/mantenimientos.css')
 
 if __name__ == "__main__":
     app.run(debug=True)
