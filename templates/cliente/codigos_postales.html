@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}Códigos Postales - Entre Lineas{% endblock %}
+
+{% block content %}
+<div class="contenido">
+    <div class="crud-options">
+        <button id="agregarCodigoPostalBtn" class="crud-buttons">
+            <span class="material-symbols-outlined">add</span>
+            Agregar Código Postal
+        </button>
+        <button id="editarCodigoPostalBtn" class="crud-buttons">
+            <span class="material-symbols-outlined">edit</span>
+            Editar Código Postal
+        </button>
+        <button id="eliminarCodigoPostalBtn" class="crud-buttons">
+            <span class="material-symbols-outlined">delete</span>
+            Eliminar Código Postal
+        </button>
+    </div>
+
+    <!-- Tabla -->
+    <div id="tablaCodigosPostales" class="tabla-container hide">
+        <input type="text" id="buscarPaisidCodigoPostalInput" placeholder="País (ID)">
+        <input type="number" id="buscarPrefijoCodigoPostalInput" placeholder="Prefijo provincia">
+        <input type="text" id="buscarRestoCodigoPostalInput" placeholder="Resto">
+        <input type="number" id="buscarPoblacionidCodigoPostalInput" placeholder="Población ID">
+        <button id="buscarCodigoPostalBtn">Buscar</button>
+        <table class="tabla-paises">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>País ID</th>
+                    <th>Prefijo</th>
+                    <th>Resto</th>
+                    <th>Población ID</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyCodigosPostales">
+                <!-- JS -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Formulario para agregar código postal -->
+    <div id="formAgregarCodigoPostal" class="form-container hide">
+        <h3>Nuevo Código Postal</h3>
+        <form id="codigoPostalForm">
+            <label for="paisid">País (ID alpha-3):</label>
+            <input type="text" id="paisid" name="paisid" maxlength="3" required>
+            <label for="prefijo">Prefijo provincia (número):</label>
+            <input type="number" id="prefijo" name="prefijo" min="1" max="99" required>
+            <label for="resto">Resto:</label>
+            <input type="text" id="resto" name="resto" maxlength="10" required>
+            <label for="poblacionid">Población ID:</label>
+            <input type="number" id="poblacionid" name="poblacionid" required>
+            <button type="submit">Guardar</button>
+            <button type="button" class="cancelarBtn">Cancelar</button>
+        </form>
+    </div>
+
+    <!-- Formulario para editar código postal -->
+    <div id="formEditarCodigoPostal" class="form-container hide">
+        <h3>Editar Código Postal</h3>
+        <div id="busquedaEditarCodigoPostal" class="form-container hide">
+            <input type="text" id="buscarPaisidCodigoPostal" placeholder="País (ID)">
+            <input type="number" id="buscarPrefijoCodigoPostal" placeholder="Prefijo provincia">
+            <input type="text" id="buscarRestoCodigoPostal" placeholder="Resto">
+            <input type="number" id="buscarPoblacionidCodigoPostal" placeholder="Población ID">
+            <button id="btnBuscarCodigoPostal">Buscar</button>
+        </div>
+        <form id="codigoPostalEditForm">
+            <input type="hidden" id="id" name="id" required>
+            <label for="paisid">País (ID alpha-3):</label>
+            <input type="text" id="paisid" name="paisid" maxlength="3" required>
+            <label for="prefijo">Prefijo provincia (número):</label>
+            <input type="number" id="prefijo" name="prefijo" min="1" max="99" required>
+            <label for="resto">Resto:</label>
+            <input type="text" id="resto" name="resto" maxlength="10" required>
+            <label for="poblacionid">Población ID:</label>
+            <input type="number" id="poblacionid" name="poblacionid" required>
+            <button type="submit">Guardar</button>
+            <button type="button" class="cancelarBtn">Cancelar</button>
+        </form>
+    </div>
+
+    <!-- Formulario para eliminar código postal -->
+    <div id="formEliminarCodigoPostal" class="form-container hide">
+        <h3>Eliminar Código Postal</h3>
+        <form id="eliminarCodigoPostalForm">
+            <label for="eliminarCodigoPostalId">ID de código postal:</label>
+            <input type="number" id="eliminarCodigoPostalId" name="eliminarCodigoPostalId" required>
+            <button type="submit">Eliminar</button>
+            <button type="button" class="cancelarBtn">Cancelar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/codigo_postal.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Clientes - Entre Lineas{% endblock %}
+
+{% block content %}
+<div class="contenido">
+    <div class="crud-options">
+        <button id="agregarClienteBtn" class="crud-buttons">
+            <span class="material-symbols-outlined">add</span>
+            Agregar Cliente
+        </button>
+        <button id="editarClienteBtn" class="crud-buttons">
+            <span class="material-symbols-outlined">edit</span>
+            Editar Cliente
+        </button>
+        <button id="eliminarClienteBtn" class="crud-buttons">
+            <span class="material-symbols-outlined">delete</span>
+            Eliminar Cliente
+        </button>
+    </div>
+
+    <!-- Tabla -->
+    <div id="tablaClientes" class="tabla-container hide">
+        <input type="text" id="buscarNombreClienteInput" placeholder="Buscar cliente por nombre...">
+        <button id="buscarNombreClienteBtn">Buscar</button>
+        <table class="tabla-paises">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>NIF</th>
+                    <th>Dirección</th>
+                    <th>Población ID</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyClientes">
+                <!-- JS -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Formulario para agregar cliente -->
+    <div id="formAgregarCliente" class="form-container hide">
+        <h3>Nuevo Cliente</h3>
+        <form id="clienteForm">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+            <label for="nif">NIF:</label>
+            <input type="text" id="nif" name="nif">
+            <label for="direccion">Dirección:</label>
+            <input type="text" id="direccion" name="direccion">
+            <label for="poblacionid">Población ID:</label>
+            <input type="number" id="poblacionid" name="poblacionid">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email">
+            <label for="telefono">Teléfono:</label>
+            <input type="text" id="telefono" name="telefono">
+            <button type="submit">Guardar</button>
+            <button type="button" class="cancelarBtn">Cancelar</button>
+        </form>
+    </div>
+
+    <!-- Formulario para editar cliente -->
+    <div id="formEditarCliente" class="form-container hide">
+        <h3>Editar Cliente</h3>
+        <div id="busquedaEditarCliente" class="form-container hide">
+            <input type="text" id="buscarNombreCliente" placeholder="Buscar cliente por nombre...">
+            <button id="btnBuscarCliente">Buscar</button>
+        </div>
+        <form id="clienteEditForm">
+            <input type="hidden" id="id_cliente" name="id_cliente" required>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+            <label for="nif">NIF:</label>
+            <input type="text" id="nif" name="nif">
+            <label for="direccion">Dirección:</label>
+            <input type="text" id="direccion" name="direccion">
+            <label for="poblacionid">Población ID:</label>
+            <input type="number" id="poblacionid" name="poblacionid">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email">
+            <label for="telefono">Teléfono:</label>
+            <input type="text" id="telefono" name="telefono">
+            <button type="submit">Guardar</button>
+            <button type="button" class="cancelarBtn">Cancelar</button>
+        </form>
+    </div>
+
+    <!-- Formulario para eliminar cliente -->
+    <div id="formEliminarCliente" class="form-container hide">
+        <h3>Eliminar Cliente</h3>
+        <form id="eliminarClienteForm">
+            <label for="eliminarClienteId">ID de cliente:</label>
+            <input type="number" id="eliminarClienteId" name="eliminarClienteId" required>
+            <button type="submit">Eliminar</button>
+            <button type="button" class="cancelarBtn">Cancelar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/cliente.js') }}"></script>
+{% endblock %}
