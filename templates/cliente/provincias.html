@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}Provincias - Entre Lineas{% endblock %}
+
+{% block content %}
+<div class="contenido">
+    <div class="crud-options">
+        <button id="agregarProvinciaBtn" class="crud-buttons">
+            <span class="material-symbols-outlined">add</span>
+            Agregar Provincia
+        </button>
+        <button id="editarProvinciaBtn" class="crud-buttons">
+            <span class="material-symbols-outlined">edit</span>
+            Editar Provincia
+        </button>
+        <button id="eliminarProvinciaBtn" class="crud-buttons">
+            <span class="material-symbols-outlined">delete</span>
+            Eliminar Provincia
+        </button>
+    </div>
+
+    <!-- Tabla -->
+    <div id="tablaProvincias" class="tabla-container hide">
+        <input type="text" id="buscarNombreProvinciaInput" placeholder="Buscar provincia por nombre...">
+        <input type="text" id="buscarPaisidProvinciaInput" placeholder="País (ID 3 letras)">
+        <button id="buscarNombreProvinciaBtn">Buscar</button>
+        <table class="tabla-paises">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>País (ID)</th>
+                    <th>Código ISO</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyProvincias">
+                <!-- JS -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Formulario para agregar provincia -->
+    <div id="formAgregarProvincia" class="form-container hide">
+        <h3>Nueva Provincia</h3>
+        <form id="provinciaForm">
+            <label for="provinciaid">Código (ID)</label>
+            <input type="number" id="provinciaid" name="provinciaid" min="1" max="99" required>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+            <label for="paisid">País (ID alpha-3):</label>
+            <input type="text" id="paisid" name="paisid" maxlength="3" required>
+            <label for="codigo_iso">Código ISO:</label>
+            <input type="text" id="codigo_iso" name="codigo_iso">
+            <button type="submit">Guardar</button>
+            <button type="button" class="cancelarBtn">Cancelar</button>
+        </form>
+    </div>
+
+    <!-- Formulario para editar provincia -->
+    <div id="formEditarProvincia" class="form-container hide">
+        <h3>Editar Provincia</h3>
+        <div id="busquedaEditarProvincia" class="form-container hide">
+            <input type="text" id="buscarNombreProvincia" placeholder="Buscar provincia por nombre...">
+            <input type="text" id="buscarPaisidProvincia" placeholder="País (ID)">
+            <button id="btnBuscarProvincia">Buscar</button>
+        </div>
+        <form id="provinciaEditForm">
+            <label for="provinciaid">Código (ID)</label>
+            <input type="number" id="provinciaid" name="provinciaid" min="1" max="99" required>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+            <label for="paisid">País (ID alpha-3):</label>
+            <input type="text" id="paisid" name="paisid" maxlength="3" required>
+            <label for="codigo_iso">Código ISO:</label>
+            <input type="text" id="codigo_iso" name="codigo_iso">
+            <button type="submit">Guardar</button>
+            <button type="button" class="cancelarBtn">Cancelar</button>
+        </form>
+    </div>
+
+    <!-- Formulario para eliminar provincia -->
+    <div id="formEliminarProvincia" class="form-container hide">
+        <h3>Eliminar Provincia</h3>
+        <form id="eliminarProvinciaForm">
+            <label for="eliminarPaisidProvincia">País (ID alpha-3):</label>
+            <input type="text" id="eliminarPaisidProvincia" name="eliminarPaisidProvincia" maxlength="3" required>
+            <label for="eliminarProvinciaId">Código de provincia (número):</label>
+            <input type="number" id="eliminarProvinciaId" name="eliminarProvinciaId" min="1" max="99" required>
+            <button type="submit">Eliminar</button>
+            <button type="button" class="cancelarBtn">Cancelar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/provincia.js') }}"></script>
+{% endblock %}
