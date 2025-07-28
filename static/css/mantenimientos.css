@@ -6,7 +6,7 @@ body {
 }
 
 .sidebar {
-    background: #222;
+    background: #000;
     color: #fff;
     min-height: 100vh;
     transition: width 0.3s;

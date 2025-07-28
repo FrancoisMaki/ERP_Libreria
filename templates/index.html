@@ -1,86 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
-    <title>Entre Lineas - Inicio</title>
-</head>
+{% block title %}Inicio - Entre Lineas{% endblock %}
 
-<body>
-    <!--Barra de Opciones-->
-    <aside id="sidebar" class="sidebar expanded">
-        <div class="barra-opciones">
-            <!--Botón para expandir/contraer-->
-            <button id="toggleSidebar" class="toggle-sidebar" aria-label="Expandir/Contraer menú">
-                <span class="material-symbols-outlined">menu</span>
-            </button>
-            <!--Logo-->
-            <div class="logo">
-                <img src="{{ url_for('static', filename='img/entre_lineas_logo.png') }}" alt="Logo Entre Lineas">
-            </div>
-            <!--Opciones de Navegación-->
-            <div class="opciones">
-                <ul>
-                    <li>
-                        <a href="#" class="opcion">
-                            <span class="material-symbols-outlined">home</span>
-                            <span class="texto">Inicio</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="opcion">
-                            <span class="material-symbols-outlined">build</span>
-                            <span class="texto">Mantenimiento</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="opcion">
-                            <span class="material-symbols-outlined">mail</span>
-                            <span class="texto">Ventas</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="opcion">
-                            <span class="material-symbols-outlined">help</span>
-                            <span class="texto">Compras</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="opcion">
-                            <span class="material-symbols-outlined">help</span>
-                            <span class="texto">Almacen</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="opcion">
-                            <span class="material-symbols-outlined">help</span>
-                            <span class="texto">Estadísticas</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </aside>
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 
-    <!--Contenido Principal-->
-    <div class="main-content">
-        <!--Barra de Título-->
-        <div class="barra-titulo">
-            <div class="usuario">
-                <span class="material-symbols-outlined">account_circle</span>
-                <span>Usuario</span>
-                <button class="logout">Salir</button>
-            </div>
-        </div>
-        <!--Contenido-->
-        <div class="contenido">
-            <h1>Bienvenido a Entre Líneas</h1>
-            <p>Explora nuestros servicios y descubre cómo podemos ayudarte.</p>
-        </div>
+<div class="dashboard-cards-row">
+  <!-- Compras -->
+  <div class="dashboard-split-card">
+    <div class="split-card-left">
+      <div class="split-title">COMPRAS</div>
+      <div class="split-amount"><span id="compras-valor">1.096</span> <span class="split-euro">€</span></div>
+      <div class="split-label">Gasto en stock</div>
     </div>
-    <script src="{{ url_for('static', filename='js/index.js') }}"></script>
-</body>
-</html>
+    <div class="split-card-right">
+      <canvas id="compras-grafico"></canvas>
+    </div>
+  </div>
+  <!-- Ventas -->
+  <div class="dashboard-split-card">
+    <div class="split-card-left">
+      <div class="split-title">VENTAS</div>
+      <div class="split-amount"><span id="ventas-valor">2.258</span> <span class="split-euro">€</span></div>
+      <div class="split-label">Facturado</div>
+    </div>
+    <div class="split-card-right">
+      <canvas id="ventas-grafico"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="dashboard-cards-row">
+  <!-- Barras: Facturas vs Notas de Crédito -->
+  <div class="dashboard-stat-card big">
+    <div class="stat-card-header"></div>
+    <div class="stat-card-content">
+      <div class="stat-title">FACTURAS VS NOTAS DE CRÉDITO</div>
+    </div>
+    <div class="stat-chart-wrap bar-chart-wrap">
+      <canvas id="facturas-grafico"></canvas>
+      <div class="bar-chart-legend" id="bar-chart-legend"></div>
+    </div>
+  </div>
+  <!-- Rueda: Stock por Género -->
+  <div class="dashboard-stat-card big">
+    <div class="stat-card-header"></div>
+    <div class="stat-card-content">
+      <div class="stat-title">STOCK POR GÉNERO</div>
+    </div>
+    <div class="stat-chart-wrap">
+      <canvas id="stock-grafico"></canvas>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}

@@ -1,9 +1,59 @@
 from flask import Blueprint, jsonify, request
 from models.db import get_connection
+from utils.auth import login_required_api
 
 pais_bp = Blueprint('pais', __name__)
 
-@pais_bp.route('/api/paises/', methods=['POST'])
+@pais_bp.route('/paises/', methods=['GET'])
+@login_required_api
+def api_paises():
+    page = int(request.args.get('pagina', 1))
+    per_page = int(request.args.get('por_pagina', 10))
+    nombre = request.args.get('nombre', '').strip()
+    offset = (page - 1) * per_page
+
+    conn = get_connection()
+    if conn is None:
+        return jsonify({"error": "No se pudo conectar a la base de datos"}), 500
+
+    try:
+        cursor = conn.cursor(dictionary=True)
+        params = []
+        filtro = ""
+        if nombre:
+            filtro = "WHERE UPPER(nombre) LIKE CONCAT(UPPER(%s), '%')"
+            params.append(nombre)
+
+        cursor.execute(f"SELECT COUNT(*) as total FROM pais {filtro}", params)
+        total = cursor.fetchone()['total']
+
+        params.extend([per_page, offset])
+        cursor.execute(f"""
+            SELECT paisid, nombre, codigo_numerico, prefijo_telefono
+            FROM pais
+            {filtro}
+            LIMIT %s OFFSET %s
+        """, params)
+        paises = cursor.fetchall()
+
+        total_paginas = (total + per_page - 1) // per_page
+
+        return jsonify({
+            "total": total,
+            "pagina": page,
+            "por_pagina": per_page,
+            "total_paginas": total_paginas,
+            "paises": paises
+        })
+    except Exception as e:
+        print(f"❌ Error en la consulta: {e}")
+        return jsonify({"error": "Error en la consulta"}), 500
+    finally:
+        cursor.close()
+        conn.close()
+
+@pais_bp.route('/paises/', methods=['POST'])
+@login_required_api
 def agregar_pais():
     conn = get_connection()
     if conn is None:
@@ -31,7 +81,8 @@ def agregar_pais():
         cursor.close()
         conn.close()
 
-@pais_bp.route('/api/paises/', methods=['PUT'])
+@pais_bp.route('/paises/', methods=['PUT'])
+@login_required_api
 def actualizar_pais():
     conn = get_connection()
     if conn is None:
@@ -65,7 +116,8 @@ def actualizar_pais():
         cursor.close()
         conn.close()
 
-@pais_bp.route('/api/paises/buscar', methods=['GET'])
+@pais_bp.route('/paises/buscar', methods=['GET'])
+@login_required_api
 def buscar_pais():
     nombre = request.args.get('nombre', '').strip()
     if not nombre:
@@ -77,11 +129,11 @@ def buscar_pais():
 
     try:
         cursor = conn.cursor(dictionary=True)
-        # Usamos UPPER para buscar sin importar mayúsculas/minúsculas
+        # Solo países cuyo nombre empieza con el texto
         cursor.execute("""
             SELECT paisid, nombre, codigo_numerico, prefijo_telefono
             FROM pais
-            WHERE UPPER(nombre) LIKE CONCAT('%', UPPER(%s), '%')
+            WHERE UPPER(nombre) LIKE CONCAT(UPPER(%s), '%')
             LIMIT 1
         """, (nombre,))
         pais = cursor.fetchone()
@@ -95,7 +147,8 @@ def buscar_pais():
         cursor.close()
         conn.close()
 
-@pais_bp.route('/api/paises/<paisid>', methods=['DELETE'])
+@pais_bp.route('/paises/<paisid>', methods=['DELETE'])
+@login_required_api
 def eliminar_pais(paisid):
     if not paisid:
         return jsonify({"error": "ID de país requerido para eliminar"}), 400
@@ -106,66 +159,16 @@ def eliminar_pais(paisid):
 
     try:
         cursor = conn.cursor()
-        # Primero verifica si existe el país
         cursor.execute("SELECT paisid FROM pais WHERE paisid = %s", (paisid,))
         if not cursor.fetchone():
             return jsonify({"error": "País no encontrado"}), 404
 
-        # Elimina el país
         cursor.execute("DELETE FROM pais WHERE paisid = %s", (paisid,))
         conn.commit()
         return jsonify({"mensaje": "País eliminado correctamente"}), 200
     except Exception as e:
         print(f"❌ Error al eliminar país: {e}")
         return jsonify({"error": "Error al eliminar país"}), 500
-    finally:
-        cursor.close()
-        conn.close()
-
-@pais_bp.route('/api/paises/', methods=['GET'])
-def api_paises():
-    page = int(request.args.get('pagina', 1))
-    per_page = int(request.args.get('por_pagina', 10))
-    nombre = request.args.get('nombre', '').strip()
-    offset = (page - 1) * per_page
-
-    conn = get_connection()
-    if conn is None:
-        return jsonify({"error": "No se pudo conectar a la base de datos"}), 500
-
-    try:
-        cursor = conn.cursor(dictionary=True)
-        params = []
-        filtro = ""
-        if nombre:
-            # Solo países cuyo nombre empieza con 'nombre' (mayúsculas/minúsculas)
-            filtro = "WHERE UPPER(nombre) LIKE CONCAT(UPPER(%s), '%')"
-            params.append(nombre)
-
-        cursor.execute(f"SELECT COUNT(*) as total FROM pais {filtro}", params)
-        total = cursor.fetchone()['total']
-
-        params.extend([per_page, offset])
-        cursor.execute(f"""
-            SELECT paisid, nombre, codigo_numerico, prefijo_telefono
-            FROM pais
-            {filtro}
-            LIMIT %s OFFSET %s
-        """, params)
-        paises = cursor.fetchall()
-
-        total_paginas = (total + per_page - 1) // per_page
-
-        return jsonify({
-            "total": total,
-            "pagina": page,
-            "por_pagina": per_page,
-            "total_paginas": total_paginas,
-            "paises": paises
-        })
-    except Exception as e:
-        print(f"❌ Error en la consulta: {e}")
-        return jsonify({"error": "Error en la consulta"}), 500
     finally:
         cursor.close()
         conn.close()

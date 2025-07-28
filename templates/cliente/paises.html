@@ -1,119 +1,10 @@
-<!DOCTYPE html>
-<html lang="es">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap" rel="stylesheet">
-    <!-- CSS (Flask) -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/mantenimientos.css') }}">
-    <title>Entre Lineas - Inicio</title>
-</head>
+{% block title %}Países - Entre Lineas{% endblock %}
 
-<body>    
-    <!-- Barra lateral -->
-    <aside id="sidebar" class="sidebar expanded">
-        <div class="barra-opciones">
-            <!-- Botón para expandir/contraer -->
-            <button id="toggleSidebar" class="toggle-sidebar" aria-label="Expandir/Contraer menú">
-                <span class="material-symbols-outlined">menu</span>
-            </button>
-    
-            <div class="logo">
-                <img src="{{ url_for('static', filename='img/entre_lineas_logo.png') }}" alt="Logo Entre Lineas">
-            </div>
-    
-            <div class="opciones">
-                <ul>
-                    <li>
-                        <a href="{{ url_for('index') }}" class="opcion">
-                            <span class="material-symbols-outlined">home</span>
-                            <span class="texto">Inicio</span>
-                        </a>
-                    </li>
+{% block content %}
 
-                    <li>
-                        <a href="#" id="mantenimientoBtn" class="opcion mantenimiento-toggle">
-                            <span class="material-symbols-outlined">inventory</span>
-                            <span class="texto">Mantenimiento</span>
-                            <span class="material-symbols-outlined flecha-dropdown" id="flechaDropdown">expand_more</span>
-                        </a>
-                        <ul class="dropdown hide" id="mantenimientoDropdown">
-                            <li><a href="{{ url_for('paises') }}">Paises</a></li>
-                            <li><a href="">Provincias</a></li>
-                            <li><a href="">Poblaciones</a></li>
-                            <li><a href="">Empresas</a></li>
-                            <li><a href="">Clientes</a></li>
-                            <li><a href="">Proveedores</a></li>
-                            <li><a href="">Categorías</a></li>
-                            <li><a href="">Autores</a></li>
-                            <li><a href="">Almacenes</a></li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <a href="#" id="ventasBtn" class="opcion ventas-toggle">
-                            <span class="material-symbols-outlined">payments</span>
-                            <span class="texto">Ventas</span>
-                            <span class="material-symbols-outlined flecha-dropdown" id="flechaDropdown">expand_more</span>
-                        </a>
-                        <ul class="dropdown hide" id="ventasDropdown">
-                            <li><a href="">Nueva Venta</a></li>
-                            <li><a href="">Consultar Venta</a></li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <a href="#" id="comprasBtn" class="opcion compras-toggle">
-                            <span class="material-symbols-outlined">help</span>
-                            <span class="texto">Compras</span>
-                            <span class="material-symbols-outlined flecha-dropdown" id="flechaDropdown">expand_more</span>
-                        </a>
-                        <ul class="dropdown hide" id="comprasDropdown">
-                            <li><a href="">Registrar Compra</a></li>
-                            <li><a href="">Proveedores</a></li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <a href="#" id="almacenBtn" class="opcion almacen-toggle">
-                            <span class="material-symbols-outlined">store</span>
-                            <span class="texto">Almacen</span>
-                            <span class="material-symbols-outlined flecha-dropdown" id="flechaDropdown">expand_more</span>
-                        </a>
-                        <ul class="dropdown hide" id="almacenDropdown">
-                            <li><a href="">Productos</a></li>
-                            <li><a href="">Stock</a></li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <a href="#" id="estadisticasBtn" class="opcion estadisticas-toggle">
-                            <span class="material-symbols-outlined">analytics</span>
-                            <span class="texto">Estadísticas</span>
-                            <span class="material-symbols-outlined flecha-dropdown" id="flechaDropdown">expand_more</span>
-                        </a>
-                        <ul class="dropdown hide" id="estadisticasDropdown">
-                            <li><a href="">Graficos</a></li>
-                            <li><a href="">Resumen</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </aside>
-
-    <!-- Contenido principal -->
-    <div class="main-content">
-        <div class="barra-titulo">
-            <div class="usuario">
-                <span class="material-symbols-outlined">account_circle</span>
-                <span>Usuario</span>
-                <button class="logout">Salir</button>
-            </div>
-        </div>
-
-        <div class="contenido">
+    <div class="contenido">
             <div class="crud-options">
                 <!-- <button id="mostrarTablaBtn" class="crud-buttons">
                     <span class="material-symbols-outlined">table</span>
@@ -217,12 +108,9 @@
             </div>
 
 
-        </div>
     </div>
+{% endblock %}
 
+{% block scripts %}
     <script src="{{ url_for('static', filename='js/pais.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
-
-</body>
-
-</html>
+{% endblock %}

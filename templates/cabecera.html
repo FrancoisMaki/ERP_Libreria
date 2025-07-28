@@ -1,0 +1,13 @@
+<div class="barra-titulo">
+    <div class="usuario">
+        <span class="material-symbols-outlined">account_circle</span>
+        <span>
+            {{ session['nombre'] if 'nombre' in session else session['nombre_usuario'] if 'nombre_usuario' in session else 'Invitado' }}
+        </span>
+        {% if 'nombre_usuario' in session %}
+        <form action="{{ url_for('auth.logout') }}" method="post" style="display:inline;">
+            <button type="submit" class="logout">Salir</button>
+        </form>
+        {% endif %}
+    </div>
+</div>

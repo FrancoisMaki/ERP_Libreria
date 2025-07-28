@@ -6,7 +6,7 @@ body {
 }
 
 .sidebar {
-    background: #222;
+    background: #000;
     color: #fff;
     min-height: 100vh;
     transition: width 0.3s;
@@ -117,6 +117,57 @@ body {
     margin: 30px auto 0 auto;
     display: block;
 }
+
+/* DROPDOWN SUBLISTA */
+.dropdown {
+    background: #222;
+    margin-left: 45px;
+    padding: 8px 0 8px 10px;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 2px 10px #0002;
+    transition: max-height 0.25s, opacity 0.2s;
+    max-height: 500px;
+    opacity: 1;
+    overflow: hidden;
+}
+.dropdown.hide {
+    max-height: 0;
+    opacity: 0;
+    padding: 0 0 0 10px;
+}
+.dropdown li {
+    margin: 7px 0;
+}
+.dropdown a {
+    color: #fff;
+    text-decoration: none;
+    padding: 4px 12px;
+    border-radius: 4px;
+    display: block;
+    transition: background 0.15s;
+}
+.dropdown a:hover {
+    background: #444;
+}
+
+/* Flecha para el dropdown */
+.flecha-dropdown {
+    margin-left: auto;
+    transition: transform 0.2s;
+}
+.mantenimiento-open .flecha-dropdown {
+    transform: rotate(180deg);
+}
+
+/* Cuando sidebar está contraido, oculta el dropdown */
+.sidebar.contraido .dropdown {
+    display: none !important;
+}
+
+.sidebar.contraido .flecha-dropdown {
+    display: none !important;
+}
+
 @media (max-width: 900px) {
     .sidebar.expanded {
         width: 160px;
@@ -166,4 +217,192 @@ body {
     .main-content {
         margin-top: 56px;
     }
+}
+
+.dashboard-cards-row {
+  display: flex;
+  gap: 28px;
+  margin-top: 24px;
+  margin-bottom: 24px;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+/* SPLIT CARDS (arriba: Compras/Ventas) */
+.dashboard-split-card {
+  display: flex;
+  flex-direction: row;
+  background: #fff;
+  border-radius: 11px;
+  box-shadow: 0 1px 6px #0001;
+  min-width: 320px;
+  flex: 1 1 0;
+  min-height: 170px;
+  overflow: hidden;
+  position: relative;
+}
+
+.split-card-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 30px 18px 30px 32px;
+  min-width: 0;
+  flex: 0 0 210px;
+}
+
+.split-title {
+  font-size: 1.25em;
+  font-weight: 700;
+  color: #1aa2e3;
+  margin-bottom: 8px;
+  letter-spacing: 0.02em;
+}
+
+.split-amount {
+  font-size: 2.7em;
+  font-weight: 800;
+  color: #2173b8;
+  margin-bottom: 3px;
+  line-height: 1;
+}
+
+.split-euro {
+  font-size: 0.55em;
+  font-weight: 700;
+  color: #2173b8;
+}
+
+.split-label {
+  font-size: 1.10em;
+  color: #8bb3d7;
+  font-weight: 500;
+  margin-bottom: 0;
+}
+
+.split-card-right {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  height: 100%;
+  padding: 0 0 0 0;
+}
+
+.split-card-right canvas {
+  width: 96% !important;
+  max-width: 540px;
+  min-width: 220px;
+  height: 140px !important;
+  display: block;
+}
+
+/* CARDS DE ABAJO */
+.dashboard-stat-card {
+  background: #fff;
+  border-radius: 11px;
+  box-shadow: 0 1px 6px #0001;
+  flex: 1 1 0;
+  min-width: 320px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-stat-card.big {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.stat-card-header {
+  height: 4px;
+  width: 100%;
+  background: #1aa2e3;
+  border-radius: 11px 11px 0 0;
+  margin-bottom: 0;
+}
+
+.stat-card-content {
+  padding: 18px 22px 0 22px;
+}
+
+.stat-title {
+  font-size: 1.15em;
+  letter-spacing: 0.02em;
+  font-weight: 700;
+  color: #1aa2e3;
+  margin-bottom: 8px;
+}
+
+.stat-chart-wrap {
+  width: 100%;
+  padding: 0 16px 18px 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 90px;
+  overflow-x: auto;
+}
+.bar-chart-wrap {
+  align-items: flex-start;
+}
+
+/* GRÁFICAS */
+#facturas-grafico {
+  width: 100% !important;
+  min-width: 320px;
+  max-width: 600px;
+  height: 240px !important;
+  display: block;
+  margin: 0 auto;
+}
+
+#stock-grafico {
+  width: 100% !important;
+  max-width: 340px;
+  min-width: 180px;
+  height: 220px !important;
+  display: block;
+}
+
+.bar-chart-legend {
+  margin-top: 16px;
+  font-size: 1.08em;
+  color: #2173b8;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+.legend-box {
+  display: inline-block;
+  width: 18px;
+  height: 13px;
+  border-radius: 2px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.legend-facturas {
+  background: #4a90e2;
+}
+.legend-notas {
+  background: #f5b041;
+}
+
+@media (max-width: 1100px) {
+  .split-card-right canvas { max-width: 300px; }
+  #facturas-grafico { min-width: 0; }
+}
+@media (max-width: 900px) {
+  .dashboard-cards-row { flex-direction: column; gap: 16px; }
+  .split-card-left { padding: 18px 6px 18px 14px; flex-basis: 110px; }
+  .split-card-right { padding: 0; }
 }

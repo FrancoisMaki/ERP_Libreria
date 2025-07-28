@@ -1,5 +1,23 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const API_BASE = "/cliente/api/paises/";
+
+    // Función fetchProtegido para manejar 401 y errores de backend
+    function fetchProtegido(url, options = {}) {
+        return fetch(url, options)
+            .then(response => {
+                if (response.status === 401) {
+                    window.location.href = '/login';
+                    throw new Error('No autorizado');
+                }
+                if (!response.ok) {
+                    return response.text().then(text => {
+                        throw new Error(text || "Error al cargar países");
+                    });
+                }
+                return response.json();
+            });
+    }
+
+    const API_BASE = "/api/paises/";
 
     // Variables y elementos globales
     const tablaContainer = document.getElementById("tablaPaises");
@@ -32,11 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (nombreBusqueda) {
             url += `&nombre=${encodeURIComponent(nombreBusqueda)}`;
         }
-        fetch(url)
-            .then(res => {
-                if (!res.ok) throw new Error("Error al cargar países");
-                return res.json();
-            })
+        fetchProtegido(url)
             .then(data => {
                 tbody.innerHTML = '';
                 const paises = data.paises || [];
@@ -121,8 +135,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const eliminarPaisForm = document.getElementById("eliminarPaisForm");
     const btnEliminar = document.getElementById("eliminarPaisBtn");
 
-    const btnCancelar = document.getElementById("cancelarBtn");
-    
     const buscarInput = document.getElementById("buscarNombrePais");
     const btnBuscarPais = document.getElementById("btnBuscarPais");
 
@@ -143,11 +155,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 tablaContainer.classList.add("hide");
                 togglePaginacion(false);
-                
+
                 btnAgregar.disabled = true;
                 btnEditar.disabled = false;
                 btnEliminar.disabled = false;
-
                 break;
 
             case 'editarPaisBtn':
@@ -160,14 +171,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 formEditarDiv.classList.remove("hide");
                 formEditarForm.classList.remove("hide");
                 formBuscarPaisDiv.classList.remove("hide");
-                
+
                 tablaContainer.classList.add("hide");
                 togglePaginacion(false);
 
                 btnEditar.disabled = true;
                 btnAgregar.disabled = false;
                 btnEliminar.disabled = false;
-            
                 break;
 
             case 'eliminarPaisBtn':
@@ -187,12 +197,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 btnEliminar.disabled = true;
                 btnAgregar.disabled = false;
                 btnEditar.disabled = false;
+                break;
 
             default:
                 console.log('Acción desconocida');
         }
     }
-    
+
     // Asígnalo a los dos botones principales
     btnAgregar.addEventListener("click", manejarAccion);
     btnEditar.addEventListener("click", manejarAccion);
@@ -210,7 +221,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Si es botón Editar, muestra el form de editar y rellena los datos
         if (btn.textContent === 'Editar') {
-            // Oculta todo y muestra solo el editar
             formAgregarDiv.classList.add("hide");
             formAgregarForm.classList.add("hide");
 
@@ -222,9 +232,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             formEditarDiv.classList.remove("hide");
             formEditarForm.classList.remove("hide");
-            formBuscarPaisDiv.classList.add("hide"); // Si quieres ocultar buscador aquí
+            formBuscarPaisDiv.classList.add("hide");
 
-            // Rellena el form de editar
             formEditarForm.paisid.value = paisid;
             formEditarForm.nombre.value = nombre;
             formEditarForm.codigo_numerico.value = codigo_numerico;
@@ -240,9 +249,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!window.confirm(`¿Estás seguro que deseas eliminar el país "${nombre}" (ID: ${paisid})? Esta acción no se puede deshacer.`)) {
                 return;
             }
-            fetch(`${API_BASE}${paisid}`, { method: "DELETE" })
-                .then(res => {
-                    if (!res.ok) throw new Error("No se encontró el país o no se pudo eliminar");
+            fetchProtegido(`${API_BASE}${paisid}`, { method: "DELETE" })
+                .then(data => {
                     alert("País eliminado correctamente");
                     cargarPagina(paginaActual);
                 })
@@ -295,18 +303,14 @@ document.addEventListener("DOMContentLoaded", () => {
             prefijo_telefono: formAgregarForm.prefijo_telefono.value.trim()
         };
 
-        fetch(API_BASE, {
+        fetchProtegido(API_BASE, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(datos)
         })
-        .then(res => {
-            if (!res.ok) throw new Error("Error al guardar país");
-            return res.json();
-        })
         .then(data => {
             alert("País agregado correctamente");
-            
+
             formAgregarForm.reset();
             formAgregarDiv.classList.add("hide");
             formAgregarForm.classList.add("hide");
@@ -339,11 +343,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        fetch(`${API_BASE}/buscar?nombre=${encodeURIComponent(nombre)}`)
-        .then(res => {
-            if (!res.ok) throw new Error("País no encontrado");
-            return res.json();
-        })
+        fetchProtegido(`${API_BASE}/buscar?nombre=${encodeURIComponent(nombre)}`)
         .then(data => {
             formEditarForm.paisid.value = data.paisid;
             formEditarForm.nombre.value = data.nombre;
@@ -366,14 +366,10 @@ document.addEventListener("DOMContentLoaded", () => {
             prefijo_telefono: formEditarForm.prefijo_telefono.value.trim()
         };
 
-        fetch(API_BASE, {
+        fetchProtegido(API_BASE, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(datos)
-        })
-        .then(res => {
-            if (!res.ok) throw new Error("Error al actualizar país");
-            return res.json();
         })
         .then(data => {
             alert("País actualizado correctamente");
@@ -396,16 +392,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // ELIMINAR PAÍS
-        // Mostrar el formulario de eliminar
     btnEliminar.addEventListener("click", () => {
-        // Oculta los demás formularios
         formAgregarDiv.classList.add("hide");
         formAgregarForm.classList.add("hide");
         formEditarDiv.classList.add("hide");
         formEditarForm.classList.add("hide");
         formBuscarPaisDiv.classList.add("hide");
 
-        // Muestra el form eliminar
         formEliminarDiv.classList.remove("hide");
         eliminarPaisForm.classList.remove("hide");
 
@@ -425,14 +418,12 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        // <--- Aquí agregamos la confirmación
         if (!window.confirm(`¿Estás seguro que deseas eliminar el país "${valor}"? Esta acción no se puede deshacer.`)) {
-            return; // Si el usuario cancela, no hace nada
+            return;
         }
 
-        fetch(`${API_BASE}${valor}`, { method: "DELETE" })
-            .then(res => {
-                if (!res.ok) throw new Error("No se encontró el país o no se pudo eliminar");
+        fetchProtegido(`${API_BASE}${valor}`, { method: "DELETE" })
+            .then(data => {
                 alert("País eliminado correctamente");
 
                 eliminarPaisForm.reset();
@@ -443,7 +434,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 togglePaginacion(true);
 
                 btnEliminar.disabled = false;
-                
+
                 cargarPagina(1);
             })
             .catch(err => {

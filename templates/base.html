@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap" rel="stylesheet">
+    {% if css_file %}
+    <link rel="stylesheet" href="{{ url_for('static', filename=css_file) }}">
+    {% endif %}
+    <title>{% block title %}Entre Lineas{% endblock %}</title>
+</head>
+<body>
+    {% include 'sidebar.html' %}
+
+    <div class="main-content">
+        {% include 'cabecera.html' %}
+        {% block content %}{% endblock %}
+    </div>
+
+    
+    {% block scripts %}
+    {% endblock %}
+    <script src="{{ url_for('static', filename='js/sidebar.js') }}"></script>
+
+</body>
+</html>
