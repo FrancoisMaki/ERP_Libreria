@@ -1,23 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-</head>
-<body>
-     <h2>Iniciar sesión</h2>
-    <form method="POST">
-        <label>Usuario:</label>
-        <input type="text" name="nombre_usuario" required>
-        <br>
-        <label>Contraseña:</label>
-        <input type="password" name="contraseña" required>
-        <br>
-        <button type="submit">Entrar</button>
-    </form>
-    {% if error %}
-        <p style="color:red;">{{ error }}</p>
-    {% endif %}
-</body>
+<!doctype html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        
+        <title> Formulario de Acceso </title>    
+        
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    </head>
+    
+    <body>
+        
+        <div id="contenedor">
+            <div id="central">
+                <div id="login">
+                    <div class="titulo">
+                        Bienvenido
+                    </div>
+                    <form id="loginform" method="post">
+                        <input type="text" name="nombre_usuario" placeholder="Usuario" required>
+                        
+                        <input type="password" placeholder="Contraseña" name="contraseña" required>
+                        
+                        <button type="submit" title="Ingresar" name="Ingresar">Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </body>
 </html>
