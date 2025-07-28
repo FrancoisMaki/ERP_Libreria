@@ -5,6 +5,7 @@ from routes.provincia_routes import provincia_bp
 from routes.poblacion_routes import poblacion_bp
 from routes.codigo_postal_routes import codigo_postal_bp
 from routes.cliente_routes import cliente_bp
+from routes.empresa_routes import empresa_bp
 from routes.auth_routes import auth_bp
 from utils.auth import login_required
 import os
@@ -22,6 +23,7 @@ app.register_blueprint(provincia_bp, url_prefix='/api')
 app.register_blueprint(poblacion_bp, url_prefix='/api')
 app.register_blueprint(codigo_postal_bp, url_prefix='/api')
 app.register_blueprint(cliente_bp, url_prefix='/api')
+app.register_blueprint(empresa_bp, url_prefix='/api')
 app.register_blueprint(auth_bp)
 
 @app.route('/')
@@ -48,6 +50,10 @@ def codigos_postales():
 @app.route('/clientes')
 def clientes():
     return render_template('cliente/clientes.html', css_file='css/mantenimientos.css')
+
+@app.route('/empresas')
+def empresas():
+    return render_template('cliente/empresas.html', css_file='css/mantenimientos.css')
 
 if __name__ == "__main__":
     app.run(debug=True)
