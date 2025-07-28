@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Facturación - Entre Líneas{% endblock %}
+
+{% block content %}
+<div class="contenido">
+    <div class="form-container" style="max-width: 690px;">
+        <h2 style="text-align: center; margin-bottom: 24px; color: #007BFF;">
+            Nueva Factura
+        </h2>
+        <form id="facturaForm" autocomplete="off">
+            <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                <div style="flex: 1 1 220px; min-width: 180px;">
+                    <label for="id_cliente">Cliente:</label>
+                    <select id="id_cliente" name="id_cliente" required></select>
+                </div>
+                <div style="flex: 1 1 120px; min-width: 120px;">
+                    <label for="fecha">Fecha:</label>
+                    <input type="date" id="fecha" name="fecha" required value="{{ fecha_hoy }}">
+                </div>
+                <div style="flex: 1 1 120px; min-width: 120px;">
+                    <label for="moneda">Moneda:</label>
+                    <select id="moneda" name="moneda" required></select>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px;">Líneas de factura</h3>
+            <div class="tabla-container">
+                <table id="tablaLineas" class="tabla-paises" style="margin-top: 10px;">
+                    <thead>
+                        <tr>
+                            <th style="min-width:180px;">Producto</th>
+                            <th style="min-width:80px;">Cantidad</th>
+                            <th style="min-width:110px;">Precio Unitario</th>
+                            <th style="min-width:110px;">Subtotal</th>
+                            <th style="min-width:80px;">Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyLineas">
+                        <!-- JS: líneas dinámicas -->
+                    </tbody>
+                </table>
+            </div>
+            <button type="button" id="agregarLineaBtn" class="crud-buttons" style="margin-top:10px;">
+                <span class="material-symbols-outlined" style="vertical-align:-4px;">add</span>
+                Agregar Línea
+            </button>
+
+            <h4 style="margin-top: 24px; text-align:right;">
+                Total: <span id="totalFactura" style="font-weight: bold; color: #007BFF;">0.00</span>
+            </h4>
+
+            <button type="submit" class="crud-buttons" style="width:100%; font-size:1.15em; margin-top:18px;">
+                <span class="material-symbols-outlined" style="vertical-align:-4px;">save</span>
+                Guardar Factura
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/facturas.js') }}"></script>
+{% endblock %}

@@ -26,13 +26,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const porPagina = 10;
     let paginaActual = 1;
     let nombreBusqueda = "";
+    let nifBusqueda = "";
 
-    // Inputs de búsqueda y botón
+    // Inputs de búsqueda y botón para la tabla
     const buscarNombreInput = document.getElementById("buscarNombreClienteInput");
-    const buscarNombreBtn = document.getElementById("buscarNombreClienteBtn");
+    const buscarNifInput = document.getElementById("buscarNifClienteInput");
+    const buscarClienteBtn = document.getElementById("buscarClienteBtn");
 
-    buscarNombreBtn.addEventListener("click", () => {
+    buscarClienteBtn.addEventListener("click", () => {
         nombreBusqueda = buscarNombreInput.value.trim();
+        nifBusqueda = buscarNifInput.value.trim();
         paginaActual = 1;
         cargarPagina(paginaActual);
     });
@@ -45,6 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const cargarPagina = (pagina) => {
         let url = `${API_BASE}?pagina=${pagina}&por_pagina=${porPagina}`;
         if (nombreBusqueda) url += `&nombre=${encodeURIComponent(nombreBusqueda)}`;
+        if (nifBusqueda) url += `&nif=${encodeURIComponent(nifBusqueda)}`;
         fetchProtegido(url)
             .then(data => {
                 tbody.innerHTML = '';
@@ -122,7 +126,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const eliminarClienteForm = document.getElementById("eliminarClienteForm");
     const btnEliminar = document.getElementById("eliminarClienteBtn");
 
-    const buscarNombreClienteInput = document.getElementById("buscarNombreCliente");
+    // Búsqueda para editar por NIF
+    const buscarNifClienteEditar = document.getElementById("buscarNifClienteEditar");
     const btnBuscarCliente = document.getElementById("btnBuscarCliente");
 
     const formBuscarDiv = document.getElementById("busquedaEditarCliente");
@@ -328,13 +333,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     btnBuscarCliente.addEventListener("click", () => {
-        const nombre = buscarNombreClienteInput.value.trim();
-        if (!nombre) {
-            alert("Ingresa el nombre del cliente a buscar");
+        const nif = buscarNifClienteEditar.value.trim();
+        if (!nif) {
+            alert("Ingresa el NIF del cliente a buscar");
             return;
         }
 
-        fetchProtegido(`${API_BASE}buscar?nombre=${encodeURIComponent(nombre)}`)
+        fetchProtegido(`${API_BASE}buscar?nif=${encodeURIComponent(nif)}`)
         .then(data => {
             formEditarForm.id_cliente.value = data.id_cliente;
             formEditarForm.nombre.value = data.nombre;

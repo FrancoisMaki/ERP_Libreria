@@ -10,6 +10,7 @@ def api_clientes():
     page = int(request.args.get('pagina', 1))
     per_page = int(request.args.get('por_pagina', 10))
     nombre = request.args.get('nombre', '').strip()
+    nif = request.args.get('nif', '').strip()
     poblacionid = request.args.get('poblacionid', '').strip()
     offset = (page - 1) * per_page
 
@@ -24,6 +25,9 @@ def api_clientes():
         if nombre:
             filtro.append("UPPER(nombre) LIKE CONCAT(UPPER(%s), '%%')")
             params.append(nombre)
+        if nif:
+            filtro.append("UPPER(nif) LIKE CONCAT(UPPER(%s), '%%')")
+            params.append(nif)
         if poblacionid:
             filtro.append("poblacionid = %s")
             params.append(poblacionid)
@@ -133,9 +137,9 @@ def actualizar_cliente():
 @cliente_bp.route('/clientes/buscar', methods=['GET'])
 @login_required_api
 def buscar_cliente():
-    nombre = request.args.get('nombre', '').strip()
-    if not nombre:
-        return jsonify({"error": "Debe proporcionar un nombre"}), 400
+    nif = request.args.get('nif', '').strip()
+    if not nif:
+        return jsonify({"error": "Debe proporcionar un NIF"}), 400
 
     conn = get_connection()
     if conn is None:
@@ -146,9 +150,9 @@ def buscar_cliente():
         cursor.execute("""
             SELECT id_cliente, nombre, nif, direccion, poblacionid, email, telefono
             FROM cliente
-            WHERE UPPER(nombre) LIKE CONCAT(UPPER(%s), '%%')
+            WHERE UPPER(nif) = UPPER(%s)
             LIMIT 1
-        """, (nombre,))
+        """, (nif,))
         cliente = cursor.fetchone()
         if not cliente:
             return jsonify({"error": "Cliente no encontrado"}), 404

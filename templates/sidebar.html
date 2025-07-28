@@ -29,7 +29,6 @@
                             <li><a href="{{ url_for('provincias') }}">Provincias</a></li>
                             <li><a href="{{ url_for('poblaciones') }}">Poblaciones</a></li>
                             <li><a href="{{ url_for('codigos_postales') }}">Codigo Postal</a></li>
-                            <li><a href="{{ url_for('clientes')}}">Clientes</a></li>
                             <li><a href="{{ url_for('empresas')}}">Empresas</a></li>
                             <li><a href="{{ url_for('proveedores')}}">Proveedores</a></li>
                             <li><a href="{{ url_for('categorias')}}">Categorías</a></li>
@@ -45,8 +44,9 @@
                             <span class="material-symbols-outlined flecha-dropdown" id="flechaDropdown">expand_more</span>
                         </a>
                         <ul class="dropdown hide" id="ventasDropdown">
-                            <li><a href="">Nueva Venta</a></li>
-                            <li><a href="">Consultar Venta</a></li>
+                            <li><a href="{{ url_for('facturas')}}">Registrar Factura</a></li>
+                            <li><a href="{{ url_for('factura_views.detalle_factura_vista', id_cabfac=1) }}">Factura Detalle</a></li>
+                            <li><a href="{{ url_for('clientes')}}">Clientes</a></li>
                         </ul>
                     </li>
 
