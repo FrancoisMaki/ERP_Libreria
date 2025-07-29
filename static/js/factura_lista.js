@@ -57,13 +57,15 @@ function cargarDetalleFactura(id_cabfac) {
             }
             const cab = data.cabecera;
             let html = `
-                <h2 style="margin-bottom: 0; font-size: 1.5em;">Visualizar factura</h2>
-                <span id="facturaId" style="display:none">${cab.id_cabfac}</span>
-                <div id="cabeceraFactura" style="margin-bottom: 20px;">
-                    <p><b>Cliente:</b> <span id="clienteNombre">${cab.cliente_nombre}</span></p>
-                    <p><b>Fecha:</b> <span id="fecha">${formatFecha(cab.fecha)}</span></p>
-                    <p><b>Moneda:</b> <span id="moneda">${cab.moneda}</span></p>
-                    <p><b>Total:</b> <span id="total">${parseFloat(cab.total).toFixed(2)}</span></p>
+                <div class="factura-cabecera-imprimir">
+                    <h2 style="margin-bottom: 0; font-size: 1.5em;">Visualizar factura</h2>
+                    <span id="facturaId" style="display:none">${cab.id_cabfac}</span>
+                    <div id="cabeceraFactura" style="margin-bottom: 20px;">
+                        <p><b>Cliente:</b> <span id="clienteNombre">${cab.cliente_nombre}</span></p>
+                        <p><b>Fecha:</b> <span id="fecha">${formatFecha(cab.fecha)}</span></p>
+                        <p><b>Moneda:</b> <span id="moneda">${cab.moneda}</span></p>
+                        <p><b>Total:</b> <span id="total">${parseFloat(cab.total).toFixed(2)}</span></p>
+                    </div>
                 </div>
                 <h3>Líneas de la factura</h3>
                 <table class="tabla-paises tabla-factura">
@@ -77,37 +79,43 @@ function cargarDetalleFactura(id_cabfac) {
                     </thead>
                     <tbody id="lineasFactura"></tbody>
                 </table>
-                <h3>Pagos</h3>
-                <table class="tabla-paises tabla-factura">
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Método</th>
-                            <th>Cantidad</th>
-                        </tr>
-                    </thead>
-                    <tbody id="pagosFactura"></tbody>
-                </table>
-                <p style="font-weight: 500;"><b>Total pagado:</b> <span id="totalPagado"></span></p>
-                <p style="font-weight: 500;"><b>Pendiente:</b> <span id="pendiente"></span></p>
-                <button id="descargarPdfBtn" class="crud-buttons guardar-btn" style="margin-top:8px;">Descargar PDF</button>
+                <div class="factura-pagos-imprimir">
+                    <h3>Pagos</h3>
+                    <table class="tabla-paises tabla-factura">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Método</th>
+                                <th>Cantidad</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pagosFactura"></tbody>
+                    </table>
+                    <div class="factura-totales-pagos">
+                        <span><b>Total pagado:</b> <span id="totalPagado"></span></span>
+                        <span style="margin-left:40px;"><b>Pendiente:</b> <span id="pendiente"></span></span>
+                    </div>
+                </div>
+                <button id="imprimirFacturaBtn" class="crud-buttons guardar-btn" style="margin-top:8px;">Imprimir factura</button>
                 <hr>
-                <h3>Registrar nuevo pago</h3>
-                <form id="formAgregarPago" style="display: flex; gap:8px; flex-wrap:wrap; align-items: flex-end;">
-                    <label>Monto:<br> <input type="number" step="0.01" name="cantidad" required style="width:120px"></label>
-                    <label>Método de pago:<br>
-                        <select name="metodo_pago" required style="width:150px">
-                            <option value="">Selecciona...</option>
-                            <option value="Contado">Contado</option>
-                            <option value="Tarjeta">Tarjeta</option>
-                            <option value="Transferencia">Transferencia</option>
-                            <option value="Otro">Otro</option>
-                        </select>
-                    </label>
-                    <label>Fecha:<br> <input type="date" name="fecha_pago" required style="width:140px"></label>
-                    <button type="submit" class="crud-buttons agregar-btn" style="width:140px;">Agregar pago</button>
-                </form>
-                <p id="pagoMensaje" style="color: green;"></p>
+                <div class="factura-registrar-pago-imprimir">
+                    <h3>Registrar nuevo pago</h3>
+                    <form id="formAgregarPago" style="display: flex; gap:8px; flex-wrap:wrap; align-items: flex-end;">
+                        <label>Monto:<br> <input type="number" step="0.01" name="cantidad" required style="width:120px"></label>
+                        <label>Método de pago:<br>
+                            <select name="metodo_pago" required style="width:150px">
+                                <option value="">Selecciona...</option>
+                                <option value="Contado">Contado</option>
+                                <option value="Tarjeta">Tarjeta</option>
+                                <option value="Transferencia">Transferencia</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                        </label>
+                        <label>Fecha:<br> <input type="date" name="fecha_pago" required style="width:140px"></label>
+                        <button type="submit" class="crud-buttons agregar-btn" style="width:140px;">Agregar pago</button>
+                    </form>
+                    <p id="pagoMensaje" style="color: green;"></p>
+                </div>
             `;
             panel.innerHTML = html;
 
@@ -128,9 +136,9 @@ function cargarDetalleFactura(id_cabfac) {
             // Cargar pagos y calcular totales
             cargarPagos(id_cabfac, parseFloat(cab.total), panel);
 
-            // Descargar PDF
-            panel.querySelector("#descargarPdfBtn").addEventListener("click", () => {
-                window.open(`/api/facturas/${id_cabfac}/pdf`, "_blank");
+            // Imprimir
+            panel.querySelector("#imprimirFacturaBtn").addEventListener("click", () => {
+                imprimirFactura(panel, cab);
             });
 
             // Formulario de pago
@@ -195,7 +203,108 @@ function cargarPagos(id_cabfac, totalFactura, panel) {
         });
 }
 
-// --- Filtro ---
+function imprimirFactura(panel, cabecera) {
+    // --- Personaliza aquí los datos de la empresa y logo ---
+    const logoUrl = "/static/img/logo_empresa.png"; // Cambia la ruta si tu logo está en otro sitio
+    const empresaNombre = "Entre Líneas";
+    const empresaDireccion = "Calle de la Lectura 123, Ciudad, País";
+    const empresaTelefono = "+34 600 123 456";
+    const empresaEmail = "info@entrelineas.com";
+
+    // Datos de factura/cliente
+    const cliente = cabecera.cliente_nombre || "";
+    const clienteNif = cabecera.cliente_nif || "";
+    const fecha = formatFecha(cabecera.fecha);
+    const numFactura = cabecera.id_cabfac;
+    const moneda = cabecera.moneda;
+    const total = parseFloat(cabecera.total).toFixed(2);
+
+    // Tablas HTML
+    const lineasHtml = panel.querySelector(".tabla-factura").outerHTML;
+    // Pagos: solo la primera tabla-pagos después de la de líneas
+    const pagosDiv = panel.querySelector(".factura-pagos-imprimir");
+    const pagosHtml = pagosDiv ? pagosDiv.innerHTML : "";
+
+    // Construcción del HTML formal
+    const contenido = `
+        <div style="margin-bottom:32px;display:flex;align-items:center;gap:26px;">
+            <div>
+                <img src="{{ url_for('static', filename='img/entre_lineas_icon_normal.webp') }}" style="max-height:80px;max-width:230px;">
+            </div>
+            <div style="font-size:1.09em;">
+                <b>${empresaNombre}</b><br>
+                <span>${empresaDireccion}</span><br>
+                <span>Tel: ${empresaTelefono}</span><br>
+                <span>${empresaEmail}</span>
+            </div>
+            <div style="flex:1"></div>
+            <div style="text-align:right;">
+                <div style="font-size:1.45em;font-weight:bold;letter-spacing:2px;">FACTURA</div>
+                <div><b>Número:</b> #${numFactura}</div>
+                <div><b>Fecha:</b> ${fecha}</div>
+            </div>
+        </div>
+        <div style="margin-bottom:16px;font-size:1.12em;">
+            <b>Cliente:</b> ${cliente} ${clienteNif ? `(${clienteNif})` : ""}<br>
+            <b>Moneda:</b> ${moneda}<br>
+            <b>Total:</b> ${total} ${moneda}
+        </div>
+        <h3 style="margin-top:28px;">Líneas de la factura</h3>
+        ${lineasHtml}
+        <div>
+            ${pagosHtml}
+        </div>
+        <div style="margin-top:40px;font-size:0.99em;color:#444;text-align:right;">Gracias por su confianza.</div>
+    `;
+
+    // --- Genera la ventana de impresión ---
+    const ventana = window.open('', '', 'height=900,width=900');
+    ventana.document.write('<html><head><title>Factura</title>');
+    ventana.document.write(`
+        <style>
+            body { font-family:Arial,sans-serif; margin: 35px; background: #fff; color:#222;}
+            table { width:100%; border-collapse:collapse; margin-bottom: 20px;}
+            th, td { border:1px solid #bbb; padding:8px; text-align:left; }
+            th { background: #f5f5fa; }
+            h3 { margin-top:28px; margin-bottom:10px;}
+            img { max-width:230px; }
+            .factura-registrar-pago-imprimir,
+            #imprimirFacturaBtn,
+            .crud-buttons.agregar-btn,
+            #pagoMensaje,
+            form,
+            hr {
+                display: none !important;
+            }
+            .factura-totales-pagos {
+                margin-top: 8px;
+                font-size: 1.08em;
+            }
+            @page { margin: 35px; }
+            /* Pie de página solo en la última página */
+            @media print {
+                body::after {
+                    content: "Página " counter(page);
+                    position: fixed;
+                    right: 32px;
+                    bottom: 20px;
+                    color: #bbb;
+                    font-size: 0.95em;
+                }
+            }
+        </style>
+    `);
+    ventana.document.write('</head><body>');
+    ventana.document.write(contenido);
+    ventana.document.write('</body></html>');
+    ventana.document.close();
+    ventana.focus();
+    setTimeout(() => {
+        ventana.print();
+        ventana.close();
+    }, 500);
+}
+
 document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("filtroNIF").addEventListener("input", function() {
         renderFacturasLista(this.value);
