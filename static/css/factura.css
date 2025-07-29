@@ -1,0 +1,598 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    display: flex;
+}
+
+.sidebar {
+    background: #000;
+    color: #fff;
+    min-height: 100vh;
+    transition: width 0.3s;
+    overflow: hidden;
+    position: relative;
+    width: 220px;
+    display: flex;
+    flex-direction: column;
+}
+.sidebar.contraido {
+    width: 60px;
+}
+.sidebar .toggle-sidebar {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2em;
+    cursor: pointer;
+    margin: 10px;
+    margin-bottom: 0;
+    outline: none;
+    align-self: flex-start;
+}
+.logo {
+    text-align: center;
+    margin: 20px 0;
+}
+.logo img {
+    width: 80px;
+    height: auto;
+}
+.opciones ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.opciones li {
+    margin: 12px 0;
+}
+.opcion {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 5px;
+    transition: background 0.2s;
+}
+.opcion:hover {
+    background: #444;
+}
+.opcion .material-symbols-outlined {
+    font-size: 1.7em;
+    margin-right: 18px;
+    transition: margin 0.3s;
+}
+.sidebar.contraido .opcion .material-symbols-outlined {
+    margin-right: 0;
+}
+.texto {
+    transition: opacity 0.25s, width 0.3s;
+    white-space: nowrap;
+}
+.sidebar.contraido .texto {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+}
+.sidebar.expanded .texto {
+    opacity: 1;
+    width: auto;
+}
+
+.main-content {
+    flex: 1;
+    padding: 0 3vw;
+    min-width: 0;
+    background: #fff;
+}
+
+.barra-titulo {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background: #eee;
+    padding: 10px 0;
+    margin-bottom: 30px;
+}
+
+.usuario {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logout {
+    background: #c32f2f;
+    color: #fff;
+    border: none;
+    padding: 7px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.contenido {
+    padding: 30px 0 0 0;
+}
+
+.banner {
+    width: 100%;
+    max-width: 600px;
+    margin: 30px auto 0 auto;
+    display: block;
+}
+
+/* ------------------ TABLA CRUD PAISES ------------------ */
+.tabla-container {
+    margin-top: 30px;
+}
+.tabla-paises {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+    background: #fff;
+    box-shadow: 0 0 8px 0 #0003;
+}
+.tabla-paises th, .tabla-paises td {
+    border: 1px solid #ccc;
+    padding: 10px 8px;
+    text-align: left;
+}
+.tabla-paises th {
+    background: #f0f0f0;
+    font-weight: bold;
+}
+.tabla-paises td button {
+    margin-right: 6px;
+    padding: 4px 10px;
+    border: none;
+    border-radius: 4px;
+    background: #007BFF;
+    color: white;
+    cursor: pointer;
+    font-size: 0.97em;
+    transition: background 0.2s;
+}
+.tabla-paises td button:last-child {
+    background: #c32f2f;
+}
+.tabla-paises td button:hover {
+    background: #0056b3;
+}
+.tabla-paises td button:last-child:hover {
+    background: #a32020;
+}
+
+/* ------------------ PAGINACION ------------------ */
+.paginacion {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+.paginacion button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.paginacion button:hover {
+    background-color: #0056b3;
+}
+.paginacion button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* ------------------ FORMULARIOS CRUD ------------------ */
+.form-container {
+    background: #fafafa;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px #0001;
+    padding: 22px 28px 18px 28px;
+    max-width: 460px;
+    margin: 35px auto 0 auto;
+}
+.form-container h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #222;
+}
+.form-container label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 500;
+    color: #444;
+}
+.form-container input,
+.form-container button[type="submit"],
+.form-container button[type="button"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1em;
+    box-sizing: border-box;
+}
+.form-container button[type="submit"] {
+    background: #007BFF;
+    color: white;
+    border: none;
+    margin-bottom: 0;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.form-container button[type="submit"]:hover {
+    background: #0056b3;
+}
+.form-container button[type="button"] {
+    background: #c32f2f;
+    color: white;
+    border: none;
+    margin-bottom: 0;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.form-container button[type="button"]:hover {
+    background: #a32020;
+}
+
+/* Ocultar formularios/tablas */
+.hide {
+    display: none !important;
+}
+.form-container.hide {
+    display: none !important;
+}
+.tabla-container.hide {
+    display: none !important;
+}
+
+/* ------------------ CRUD BUTTONS ------------------ */
+.crud-buttons {
+    background: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 9px 22px;
+    margin: 7px 7px 7px 0;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.crud-buttons:hover {
+    background: #0056b3;
+}
+
+@media (max-width: 900px) {
+    .sidebar.expanded {
+        width: 160px;
+    }
+    .main-content {
+        padding: 0 1vw;
+    }
+    .banner {
+        max-width: 90vw;
+    }
+    .form-container {
+        max-width: 95vw;
+        padding: 14px 5vw;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100vw;
+        min-height: unset;
+        height: 56px;
+        flex-direction: row;
+        align-items: center;
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        z-index: 10;
+    }
+    .sidebar.contraido,
+    .sidebar.expanded {
+        width: 100vw !important;
+    }
+    .barra-opciones {
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        justify-content: space-between;
+    }
+    .logo {
+        margin: 0 10px;
+    }
+    .opciones ul {
+        display: flex;
+        flex-direction: row;
+        gap: 6px;
+    }
+    .opcion {
+        padding: 7px 10px;
+    }
+    .main-content {
+        margin-top: 56px;
+    }
+    .form-container {
+        padding: 8px 2vw;
+    }
+    .tabla-container {
+        margin-top: 10px;
+    }
+}
+
+/* DROPDOWN SUBLISTA */
+.dropdown {
+    background: #222;
+    margin-left: 45px;
+    padding: 8px 0 8px 10px;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 2px 10px #0002;
+    transition: max-height 0.25s, opacity 0.2s;
+    max-height: 500px;
+    opacity: 1;
+    overflow: hidden;
+}
+.dropdown.hide {
+    max-height: 0;
+    opacity: 0;
+    padding: 0 0 0 10px;
+}
+.dropdown li {
+    margin: 7px 0;
+}
+.dropdown a {
+    color: #fff;
+    text-decoration: none;
+    padding: 4px 12px;
+    border-radius: 4px;
+    display: block;
+    transition: background 0.15s;
+}
+.dropdown a:hover {
+    background: #444;
+}
+
+/* Flecha para el dropdown */
+.flecha-dropdown {
+    margin-left: auto;
+    transition: transform 0.2s;
+}
+.mantenimiento-open .flecha-dropdown {
+    transform: rotate(180deg);
+}
+
+/* Cuando sidebar está contraido, oculta el dropdown */
+.sidebar.contraido .dropdown {
+    display: none !important;
+}
+
+.sidebar.contraido .flecha-dropdown {
+    display: none !important;
+}
+
+#facturaId {
+    display: none;
+}
+
+.factura-form {
+    max-width: 700px;
+    margin: 35px auto 0 auto;
+    padding: 32px 34px 28px 34px;
+}
+.factura-title {
+    text-align: center;
+    margin-bottom: 24px;
+    color: #007BFF;
+    font-size: 2em;
+    letter-spacing: 1px;
+}
+.row-flex {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+}
+.form-group {
+    flex: 1 1 220px;
+    min-width: 170px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+.input-nif {
+    width: 100%;
+    box-sizing: border-box;
+}
+.autocomplete-list {
+    position: absolute;
+    z-index: 20;
+    background: #fff;
+    border: 1px solid #ccc;
+    width: 100%;
+    max-height: 160px;
+    overflow-y: auto;
+    box-shadow: 0 2px 8px #0002;
+    top: 100%;
+    left: 0;
+}
+.autocomplete-list div {
+    padding: 7px 14px;
+    cursor: pointer;
+}
+.autocomplete-list div:hover,
+.autocomplete-list .active {
+    background: #007BFF;
+    color: #fff;
+}
+.tabla-factura input, .tabla-factura select {
+    width: 98%;
+    min-width: 40px;
+    box-sizing: border-box;
+    padding: 4px 6px;
+    font-size: 1em;
+}
+.tabla-factura td, .tabla-factura th {
+    vertical-align: middle;
+}
+.tabla-factura .autocomplete-list {
+    min-width: 180px;
+}
+.agregar-btn {
+    background: #c32f2f !important;
+    color: #fff;
+    width: 100%;
+    margin-top: 13px;
+    font-size: 1.1em;
+}
+.total-row {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 24px;
+    margin-bottom: 6px;
+    font-size: 1.13em;
+    font-weight: bold;
+    gap: 8px;
+}
+.total-num {
+    color: #007BFF;
+    font-weight: bold;
+    font-size: 1.15em;
+}
+.guardar-btn {
+    width: 100%;
+    font-size: 1.15em;
+    margin-top: 12px;
+    background: #007BFF !important;
+    color: #fff;
+    border: none;
+}
+@media (max-width: 700px) {
+    .factura-form { padding: 16px 3vw 16px 3vw; }
+    .row-flex { gap: 10px; }
+}
+
+/* Autocomplete lista */
+.autocomplete-list {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: #fff;
+    border: 1px solid #ccc;
+    width: 100%;
+    min-width: 120px;
+    max-width: 280px;
+    max-height: 180px;
+    overflow-y: auto;
+    box-shadow: 0 2px 8px #0002;
+    border-radius: 0 0 8px 8px;
+    font-size: 0.98em;
+}
+.autocomplete-list div {
+    padding: 6px 13px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.autocomplete-list div:last-child {
+    border-bottom: none;
+}
+.autocomplete-list div:hover {
+    background: #007BFF;
+    color: #fff;
+}
+
+.factura-main-panel {
+    display: flex;
+    gap: 32px;
+    min-height: 540px;
+}
+.factura-list-panel {
+    width: 320px;
+    min-width: 200px;
+    background: #fafafa;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px #0001;
+    padding: 18px 14px 18px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+.factura-buscador-input {
+    padding: 6px 10px;
+    font-size: 1em;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    margin-bottom: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+.factura-lista {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    max-height: 68vh;
+}
+.factura-lista li {
+    padding: 8px 7px 7px 7px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-size: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.factura-lista li.selected,
+.factura-lista li:hover {
+    background: #e6f0fa;
+}
+.factura-lista .factura-lista-main {
+    font-weight: bold;
+    color: #222;
+}
+.factura-lista .factura-lista-sec {
+    font-size: 0.97em;
+    color: #555;
+}
+.factura-lista .factura-lista-fecha {
+    font-size: 0.93em;
+    color: #888;
+}
+.factura-detalle-panel {
+    flex: 1;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px #0002;
+    padding: 22px 34px 28px 34px;
+    min-width: 320px;
+    max-width: 900px;
+}
+@media (max-width: 900px) {
+    .factura-main-panel {
+        flex-direction: column;
+        gap: 18px;
+    }
+    .factura-list-panel,
+    .factura-detalle-panel { max-width: 95vw; }
+}

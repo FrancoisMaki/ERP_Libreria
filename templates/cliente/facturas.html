@@ -4,54 +4,75 @@
 
 {% block content %}
 <div class="contenido">
-    <div class="form-container" style="max-width: 690px;">
-        <h2 style="text-align: center; margin-bottom: 24px; color: #007BFF;">
-            Nueva Factura
-        </h2>
+    <div class="form-container factura-form">
+        <h2 class="factura-title">Nueva Factura</h2>
         <form id="facturaForm" autocomplete="off">
-            <div style="display: flex; gap: 16px; flex-wrap: wrap;">
-                <div style="flex: 1 1 220px; min-width: 180px;">
-                    <label for="id_cliente">Cliente:</label>
-                    <select id="id_cliente" name="id_cliente" required></select>
+            <div class="row-flex">
+                <div class="form-group">
+                    <label for="cliente_nif">NIF Cliente:</label>
+                    <input type="text" id="cliente_nif" name="cliente_nif" class="input-nif" required placeholder="Ej: 87654321X" autocomplete="off">
+                    <div id="clienteSugerencias" class="autocomplete-list"></div>
+                    <input type="hidden" id="id_cliente" name="id_cliente">
                 </div>
-                <div style="flex: 1 1 120px; min-width: 120px;">
+                <div class="form-group">
                     <label for="fecha">Fecha:</label>
                     <input type="date" id="fecha" name="fecha" required value="{{ fecha_hoy }}">
                 </div>
-                <div style="flex: 1 1 120px; min-width: 120px;">
+                <div class="form-group">
                     <label for="moneda">Moneda:</label>
                     <select id="moneda" name="moneda" required></select>
                 </div>
             </div>
 
-            <h3 style="margin-top: 30px;">Líneas de factura</h3>
+            <h3 class="lineas-title">Líneas de factura</h3>
             <div class="tabla-container">
-                <table id="tablaLineas" class="tabla-paises" style="margin-top: 10px;">
+                <table id="tablaLineas" class="tabla-paises tabla-factura">
                     <thead>
                         <tr>
-                            <th style="min-width:180px;">Producto</th>
-                            <th style="min-width:80px;">Cantidad</th>
-                            <th style="min-width:110px;">Precio Unitario</th>
-                            <th style="min-width:110px;">Subtotal</th>
-                            <th style="min-width:80px;">Acción</th>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unitario</th>
+                            <th>Subtotal</th>
+                            <th>Acción</th>
                         </tr>
                     </thead>
-                    <tbody id="tbodyLineas">
-                        <!-- JS: líneas dinámicas -->
-                    </tbody>
+                    <tbody id="tbodyLineas"></tbody>
                 </table>
             </div>
-            <button type="button" id="agregarLineaBtn" class="crud-buttons" style="margin-top:10px;">
-                <span class="material-symbols-outlined" style="vertical-align:-4px;">add</span>
+            <button type="button" id="agregarLineaBtn" class="crud-buttons agregar-btn">
+                <span class="material-symbols-outlined">add</span>
                 Agregar Línea
             </button>
+            <div class="total-row">
+                <span>Total: </span>
+                <span id="totalFactura" class="total-num">0.00</span>
+            </div>
 
-            <h4 style="margin-top: 24px; text-align:right;">
-                Total: <span id="totalFactura" style="font-weight: bold; color: #007BFF;">0.00</span>
-            </h4>
+            <!-- NUEVO: Pago inicial opcional -->
+            <h3>Registrar pago inicial (opcional)</h3>
+            <div class="row-flex">
+                <div class="form-group">
+                    <label for="pago_cantidad">Monto pagado:</label>
+                    <input type="number" step="0.01" id="pago_cantidad" name="pago_cantidad" placeholder="Ej: 49.99" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="pago_metodo">Método de pago:</label>
+                    <select id="pago_metodo" name="pago_metodo">
+                        <option value="">Selecciona...</option>
+                        <option value="Contado">Contado</option>
+                        <option value="Tarjeta">Tarjeta</option>
+                        <option value="Transferencia">Transferencia</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="pago_fecha">Fecha de pago:</label>
+                    <input type="date" id="pago_fecha" name="pago_fecha">
+                </div>
+            </div>
 
-            <button type="submit" class="crud-buttons" style="width:100%; font-size:1.15em; margin-top:18px;">
-                <span class="material-symbols-outlined" style="vertical-align:-4px;">save</span>
+            <button type="submit" class="crud-buttons guardar-btn">
+                <span class="material-symbols-outlined">save</span>
                 Guardar Factura
             </button>
         </form>

@@ -1,26 +1,46 @@
 document.addEventListener("DOMContentLoaded", () => {
     // --- Configuración ---
     const API_FACTURAS = "/api/facturas/";
-    const API_CLIENTES = "/api/clientes/?por_pagina=1000";
+    const API_CLIENTES_BUSCAR = "/api/clientes/buscar";
     const API_PRODUCTOS = "/api/productos/?por_pagina=1000";
     const API_MONEDAS = "/api/monedas/";
 
-    // --- Cargar selectores (clientes, productos, monedas) ---
-    const clienteSelect = document.getElementById("id_cliente");
-    const monedaSelect = document.getElementById("moneda");
-    const productoCache = {};
+    // --- Autocompletado de cliente por NIF ---
+    const clienteInput = document.getElementById("cliente_nif");
+    const clienteSugerencias = document.getElementById("clienteSugerencias");
+    const idClienteInput = document.getElementById("id_cliente");
 
-    // Clientes
-    fetch(API_CLIENTES).then(r => r.json()).then(data => {
-        (data.clientes || []).forEach(c => {
-            const opt = document.createElement("option");
-            opt.value = c.id_cliente;
-            opt.textContent = `${c.nombre} (${c.nif})`;
-            clienteSelect.appendChild(opt);
-        });
+    clienteInput.addEventListener("input", function() {
+        const valor = clienteInput.value.trim();
+        idClienteInput.value = ""; // Limpiar id_cliente si cambia NIF
+        if (valor.length < 2) {
+            clienteSugerencias.innerHTML = "";
+            return;
+        }
+        fetch(`${API_CLIENTES_BUSCAR}?nif=${encodeURIComponent(valor)}`)
+            .then(r => r.json())
+            .then(data => {
+                clienteSugerencias.innerHTML = "";
+                (data.clientes || []).forEach(cli => {
+                    const div = document.createElement("div");
+                    div.textContent = `${cli.nombre} (${cli.nif})`;
+                    div.onclick = function() {
+                        clienteInput.value = cli.nif;
+                        idClienteInput.value = cli.id_cliente;
+                        clienteSugerencias.innerHTML = "";
+                    };
+                    clienteSugerencias.appendChild(div);
+                });
+            });
+    });
+    document.addEventListener("click", function(e) {
+        if (!clienteInput.contains(e.target) && !clienteSugerencias.contains(e.target)) {
+            clienteSugerencias.innerHTML = "";
+        }
     });
 
-    // Monedas
+    // --- Cargar monedas ---
+    const monedaSelect = document.getElementById("moneda");
     fetch(API_MONEDAS).then(r => r.json()).then(data => {
         (data.monedas || []).forEach(m => {
             const opt = document.createElement("option");
@@ -30,20 +50,19 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Productos
+    // --- Productos y líneas dinámicas ---
     let productos = [];
     let productosCargados = false;
+    const productoCache = {};
     fetch(API_PRODUCTOS).then(r => r.json()).then(data => {
         productos = data.productos || [];
         productos.forEach(p => {
             productoCache[p.isbn] = p;
         });
         productosCargados = true;
-        // Crear la primera línea solo después de cargar productos
         nuevaLinea();
     });
 
-    // --- Lógica de líneas dinámicas ---
     const tablaLineas = document.getElementById("tablaLineas");
     const tbodyLineas = document.getElementById("tbodyLineas");
     const agregarLineaBtn = document.getElementById("agregarLineaBtn");
@@ -104,14 +123,13 @@ document.addEventListener("DOMContentLoaded", () => {
         };
         tdAccion.appendChild(btnQuitar);
 
-        // Eventos para recalcular
+        // Recalcular subtotal y total
         inputCant.addEventListener("input", calcularSubtotal);
         inputPrecio.addEventListener("input", calcularSubtotal);
 
         // Autocompleta precio desde producto
         prodSel.addEventListener("change", () => {
             const prod = productoCache[prodSel.value];
-            // Usa 'precio' o 'precio_venta' según tu backend
             if (prod) inputPrecio.value = prod.precio || prod.precio_venta || 0;
             calcularSubtotal();
         });
@@ -122,7 +140,6 @@ document.addEventListener("DOMContentLoaded", () => {
             calcularTotal();
         }
 
-        // Inicializa el precio y subtotal al cargar
         setTimeout(() => {
             prodSel.dispatchEvent(new Event("change"));
         }, 100);
@@ -147,7 +164,31 @@ document.addEventListener("DOMContentLoaded", () => {
         totalFacturaSpan.textContent = total.toFixed(2);
     }
 
-    // --- Guardar factura ---
+    // --- NUEVO: Pago inicial en el formulario ---
+    // Agrega campos al form en tu HTML:
+    // <h3>Registrar pago inicial (opcional)</h3>
+    // <div class="row-flex">
+    //   <div class="form-group">
+    //     <label for="pago_cantidad">Monto pagado:</label>
+    //     <input type="number" step="0.01" id="pago_cantidad" name="pago_cantidad" placeholder="Ej: 49.99" min="0">
+    //   </div>
+    //   <div class="form-group">
+    //     <label for="pago_metodo">Método de pago:</label>
+    //     <select id="pago_metodo" name="pago_metodo">
+    //       <option value="">Selecciona...</option>
+    //       <option value="Contado">Contado</option>
+    //       <option value="Tarjeta">Tarjeta</option>
+    //       <option value="Transferencia">Transferencia</option>
+    //       <option value="Otro">Otro</option>
+    //     </select>
+    //   </div>
+    //   <div class="form-group">
+    //     <label for="pago_fecha">Fecha de pago:</label>
+    //     <input type="date" id="pago_fecha" name="pago_fecha">
+    //   </div>
+    // </div>
+
+    // Guardar factura
     const facturaForm = document.getElementById("facturaForm");
     facturaForm.addEventListener("submit", (e) => {
         e.preventDefault();
@@ -168,12 +209,32 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        const id_cliente = idClienteInput.value;
+        if (!id_cliente) {
+            alert("Selecciona un cliente válido para la factura.");
+            return;
+        }
+
+        // Tomar datos de pago inicial
+        const pago_cantidad = parseFloat(document.getElementById("pago_cantidad")?.value || "");
+        const pago_metodo = document.getElementById("pago_metodo")?.value || "";
+        const pago_fecha = document.getElementById("pago_fecha")?.value || "";
+
         const datos = {
-            id_cliente: clienteSelect.value,
+            id_cliente: id_cliente,
             fecha: document.getElementById("fecha").value,
             moneda: monedaSelect.value,
             lineas: lineas
         };
+
+        // Si hay datos de pago, agregar al JSON
+        if (pago_cantidad && pago_metodo && pago_fecha) {
+            datos.pago_inicial = {
+                cantidad: pago_cantidad,
+                metodo_pago: pago_metodo,
+                fecha_pago: pago_fecha
+            };
+        }
 
         fetch(API_FACTURAS, {
             method: "POST",
@@ -184,9 +245,9 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(data => {
             if (data.id_cabfac) {
                 alert("Factura guardada correctamente");
-                window.location.href = `/facturas/${data.id_cabfac}`;
+                window.location.href = `/factura_detalle/${data.id_cabfac}`;
             } else {
-                alert("Error al guardar factura");
+                alert(data.error || "Error al guardar factura");
             }
         })
         .catch(err => alert("Error al guardar factura: " + err));

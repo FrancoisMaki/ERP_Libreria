@@ -7,7 +7,7 @@ import os
 
 factura_bp = Blueprint('factura', __name__)
 
-# Listar facturas (con filtros opcionales)
+# Listar facturas (con filtros opcionales y búsqueda por NIF)
 @factura_bp.route('/facturas/', methods=['GET'])
 @login_required_api
 def listar_facturas():
@@ -16,6 +16,7 @@ def listar_facturas():
     cliente = request.args.get('cliente', '').strip()
     fecha = request.args.get('fecha', '').strip()
     moneda = request.args.get('moneda', '').strip()
+    nif = request.args.get('nif', '').strip()
     offset = (page - 1) * per_page
 
     conn = get_connection()
@@ -25,32 +26,39 @@ def listar_facturas():
         cursor = conn.cursor(dictionary=True)
         params = []
         filtro = []
+        join_cliente = "INNER JOIN cliente cl ON cf.id_cliente = cl.id_cliente"
         if cliente:
-            filtro.append("id_cliente = %s")
+            filtro.append("cf.id_cliente = %s")
             params.append(cliente)
         if fecha:
-            filtro.append("fecha = %s")
+            filtro.append("cf.fecha = %s")
             params.append(fecha)
         if moneda:
-            filtro.append("moneda = %s")
+            filtro.append("cf.moneda = %s")
             params.append(moneda)
+        if nif:
+            filtro.append("cl.nif LIKE %s")
+            params.append(f"%{nif}%")
         where_clause = f"WHERE {' AND '.join(filtro)}" if filtro else ""
-
-        cursor.execute(f"SELECT COUNT(*) as total FROM cabfac {where_clause}", params)
-        total = cursor.fetchone()['total']
-
-        params.extend([per_page, offset])
+        # Total
         cursor.execute(f"""
-            SELECT id_cabfac, id_cliente, fecha, total, moneda
-            FROM cabfac
+            SELECT COUNT(*) as total
+            FROM cabfac cf
+            {join_cliente}
             {where_clause}
-            ORDER BY id_cabfac DESC
-            LIMIT %s OFFSET %s
         """, params)
+        total = cursor.fetchone()['total']
+        params2 = params + [per_page, offset]
+        cursor.execute(f"""
+            SELECT cf.id_cabfac, cf.id_cliente, cl.nombre as cliente_nombre, cl.nif as cliente_nif, cf.fecha, cf.total, cf.moneda
+            FROM cabfac cf
+            {join_cliente}
+            {where_clause}
+            ORDER BY cf.id_cabfac DESC
+            LIMIT %s OFFSET %s
+        """, params2)
         facturas = cursor.fetchall()
-
         total_paginas = (total + per_page - 1) // per_page
-
         return jsonify({
             "total": total,
             "pagina": page,
@@ -61,50 +69,6 @@ def listar_facturas():
     except Exception as e:
         print(f"❌ Error en la consulta: {e}")
         return jsonify({"error": "Error en la consulta"}), 500
-    finally:
-        cursor.close()
-        conn.close()
-
-# Crear factura (cabfac + linfac)
-@factura_bp.route('/facturas/', methods=['POST'])
-@login_required_api
-def crear_factura():
-    conn = get_connection()
-    if conn is None:
-        return jsonify({"error": "No se pudo conectar a la base de datos"}), 500
-
-    data = request.get_json()
-    id_cliente = data.get("id_cliente")
-    fecha = data.get("fecha")
-    moneda = data.get("moneda")
-    lineas = data.get("lineas", [])  # lista de dicts: {id_producto, cantidad, precio_unitario}
-
-    if not id_cliente or not fecha or not moneda or not lineas:
-        return jsonify({"error": "Datos incompletos"}), 400
-
-    try:
-        cursor = conn.cursor()
-        # Calcular total
-        total = sum([float(l['cantidad']) * float(l['precio_unitario']) for l in lineas])
-
-        # Insertar cabecera
-        cursor.execute("""
-            INSERT INTO cabfac (id_cliente, fecha, total, moneda)
-            VALUES (%s, %s, %s, %s)
-        """, (id_cliente, fecha, total, moneda))
-        id_cabfac = cursor.lastrowid
-
-        # Insertar líneas
-        for l in lineas:
-            cursor.execute("""
-                INSERT INTO linfac (id_cabfac, id_producto, cantidad, precio_unitario)
-                VALUES (%s, %s, %s, %s)
-            """, (id_cabfac, l['id_producto'], l['cantidad'], l['precio_unitario']))
-        conn.commit()
-        return jsonify({"mensaje": "Factura creada correctamente", "id_cabfac": id_cabfac}), 201
-    except Exception as e:
-        print(f"❌ Error al crear factura: {e}")
-        return jsonify({"error": "Error al crear factura"}), 500
     finally:
         cursor.close()
         conn.close()
@@ -263,3 +227,62 @@ def agregar_pago(id_cabfac):
     finally:
         cursor.close()
         conn.close()
+
+# ...lo anterior igual...
+# Crear factura (cabfac + linfac + pago inicial opcional)
+@factura_bp.route('/facturas/', methods=['POST'])
+@login_required_api
+def crear_factura():
+    conn = get_connection()
+    if conn is None:
+        return jsonify({"error": "No se pudo conectar a la base de datos"}), 500
+
+    data = request.get_json()
+    id_cliente = data.get("id_cliente")
+    fecha = data.get("fecha")
+    moneda = data.get("moneda")
+    lineas = data.get("lineas", [])  # lista de dicts: {id_producto, cantidad, precio_unitario}
+    pago_inicial = data.get("pago_inicial")
+
+    if not id_cliente or not fecha or not moneda or not lineas:
+        return jsonify({"error": "Datos incompletos"}), 400
+
+    try:
+        cursor = conn.cursor()
+        # Calcular total
+        total = sum([float(l['cantidad']) * float(l['precio_unitario']) for l in lineas])
+
+        # Insertar cabecera
+        cursor.execute("""
+            INSERT INTO cabfac (id_cliente, fecha, total, moneda)
+            VALUES (%s, %s, %s, %s)
+        """, (id_cliente, fecha, total, moneda))
+        id_cabfac = cursor.lastrowid
+
+        # Insertar líneas
+        for l in lineas:
+            cursor.execute("""
+                INSERT INTO linfac (id_cabfac, id_producto, cantidad, precio_unitario)
+                VALUES (%s, %s, %s, %s)
+            """, (id_cabfac, l['id_producto'], l['cantidad'], l['precio_unitario']))
+
+        # NUEVO: Registrar pago inicial si viene
+        if pago_inicial:
+            cantidad = pago_inicial.get("cantidad")
+            metodo_pago = pago_inicial.get("metodo_pago")
+            fecha_pago = pago_inicial.get("fecha_pago")
+            if cantidad and metodo_pago and fecha_pago:
+                cursor.execute("""
+                    INSERT INTO cobropago (id_cabfac, cantidad, metodo_pago, fecha_pago)
+                    VALUES (%s, %s, %s, %s)
+                """, (id_cabfac, cantidad, metodo_pago, fecha_pago))
+
+        conn.commit()
+        return jsonify({"mensaje": "Factura creada correctamente", "id_cabfac": id_cabfac}), 201
+    except Exception as e:
+        print(f"❌ Error al crear factura: {e}")
+        return jsonify({"error": "Error al crear factura"}), 500
+    finally:
+        cursor.close()
+        conn.close()
+# ...lo demás igual...

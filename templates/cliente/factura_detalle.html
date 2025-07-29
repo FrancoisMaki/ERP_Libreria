@@ -1,67 +1,20 @@
 {% extends 'base.html' %}
-
-{% block title %}Detalle de Factura{% endblock %}
-
+{% block title %}Facturas{% endblock %}
 {% block content %}
 <div class="contenido">
-    <h2>Factura #<span id="facturaId"></span></h2>
-    <div id="cabeceraFactura">
-        <p><b>Cliente:</b> <span id="clienteNombre"></span></p>
-        <p><b>Fecha:</b> <span id="fecha"></span></p>
-        <p><b>Moneda:</b> <span id="moneda"></span></p>
-        <p><b>Total:</b> <span id="total"></span></p>
+    <div class="factura-main-panel">
+        <div class="factura-list-panel">
+            <input type="text" id="filtroNIF" placeholder="Filtrar por NIF cliente..." autocomplete="off" class="factura-buscador-input" />
+            <ul id="listaFacturas" class="factura-lista"></ul>
+        </div>
+        <div class="factura-detalle-panel" id="detalleFacturaPanel">
+            <p style="color:#888;margin-top: 40px; text-align:center;">Selecciona una factura para ver el detalle</p>
+        </div>
     </div>
-    <h3>Líneas de la factura</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Producto</th>
-                <th>Cantidad</th>
-                <th>Precio unitario</th>
-                <th>Subtotal</th>
-            </tr>
-        </thead>
-        <tbody id="lineasFactura">
-            <!-- JS -->
-        </tbody>
-    </table>
-    <h3>Pagos</h3>
-    <table>
-        <thead>
-            <tr>
-                <th>Fecha</th>
-                <th>Método</th>
-                <th>Cantidad</th>
-            </tr>
-        </thead>
-        <tbody id="pagosFactura">
-            <!-- JS -->
-        </tbody>
-    </table>
-    <p><b>Total pagado:</b> <span id="totalPagado"></span></p>
-    <p><b>Pendiente:</b> <span id="pendiente"></span></p>
-
-    <button id="descargarPdfBtn">Descargar PDF</button>
 </div>
-
-<h3>Registrar nuevo pago</h3>
-<form id="formAgregarPago">
-    <label>Monto: <input type="number" step="0.01" name="cantidad" required></label>
-    <label>Método de pago:
-        <select name="metodo_pago" required>
-            <option value="">Selecciona...</option>
-            <option value="Contado">Contado</option>
-            <option value="Tarjeta">Tarjeta</option>
-            <option value="Transferencia">Transferencia</option>
-            <option value="Otro">Otro</option>
-        </select>
-    </label>
-    <label>Fecha: <input type="date" name="fecha_pago" required></label>
-    <button type="submit">Agregar pago</button>
-</form>
-<p id="pagoMensaje" style="color: green;"></p>
 {% endblock %}
-
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/factura_detalle.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/factura.css') }}">
+<script src="{{ url_for('static', filename='js/factura_lista.js') }}"></script>
 {% endblock %}
+{% block styles %}{% endblock %}

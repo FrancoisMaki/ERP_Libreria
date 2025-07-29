@@ -136,30 +136,28 @@ def actualizar_cliente():
 
 @cliente_bp.route('/clientes/buscar', methods=['GET'])
 @login_required_api
-def buscar_cliente():
+def buscar_clientes():
     nif = request.args.get('nif', '').strip()
-    if not nif:
-        return jsonify({"error": "Debe proporcionar un NIF"}), 400
-
     conn = get_connection()
     if conn is None:
         return jsonify({"error": "No se pudo conectar a la base de datos"}), 500
-
     try:
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("""
-            SELECT id_cliente, nombre, nif, direccion, poblacionid, email, telefono
-            FROM cliente
-            WHERE UPPER(nif) = UPPER(%s)
-            LIMIT 1
-        """, (nif,))
-        cliente = cursor.fetchone()
-        if not cliente:
-            return jsonify({"error": "Cliente no encontrado"}), 404
-        return jsonify(cliente)
+        if nif:
+            cursor.execute("""
+                SELECT id_cliente, nombre, nif
+                FROM cliente
+                WHERE nif LIKE %s
+                ORDER BY nombre
+                LIMIT 10
+            """, (f"%{nif}%",))
+            clientes = cursor.fetchall()
+        else:
+            clientes = []
+        return jsonify({"clientes": clientes})
     except Exception as e:
-        print(f"❌ Error en búsqueda: {e}")
-        return jsonify({"error": "Error en la búsqueda"}), 500
+        print(f"❌ Error en la búsqueda de clientes: {e}")
+        return jsonify({"error": "Error en la búsqueda de clientes"}), 500
     finally:
         cursor.close()
         conn.close()
