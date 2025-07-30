@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Notas de Crédito{% endblock %}
+{% block content %}
+<div class="contenido">
+    <div class="factura-main-panel">
+        <div class="factura-list-panel">
+            <input type="text" id="filtroNIF" placeholder="Filtrar por NIF cliente..." autocomplete="off" class="factura-buscador-input" />
+            <ul id="listaNotasCredito" class="factura-lista"></ul>
+        </div>
+        <div class="factura-detalle-panel" id="detalleNotaCreditoPanel">
+            <p style="color:#888;margin-top: 40px; text-align:center;">Selecciona una nota de crédito para ver el detalle</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/factura.css') }}">
+<script src="{{ url_for('static', filename='js/nota_credito_lista.js') }}"></script>
+{% endblock %}
+{% block styles %}{% endblock %}

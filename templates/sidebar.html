@@ -44,21 +44,24 @@
                             <span class="material-symbols-outlined flecha-dropdown" id="flechaDropdown">expand_more</span>
                         </a>
                         <ul class="dropdown hide" id="ventasDropdown">
+                            <li><a href="{{ url_for('clientes')}}">Clientes</a></li>
                             <li><a href="{{ url_for('facturas')}}">Registrar Factura</a></li>
                             <li><a href="{{ url_for('factura_detalle', id_cabfac=1) }}">Factura Detalle</a></li>
-                            <li><a href="{{ url_for('clientes')}}">Clientes</a></li>
+                            <li><a href="{{ url_for('nota_credito_nueva')}}">Registrar Nota de Crédito</a></li>
+                            <li><a href="{{ url_for('notas_credito')}}">Notas de Crédito Detalle</a></li>
                         </ul>
                     </li>
 
                     <li>
                         <a href="#" id="comprasBtn" class="opcion compras-toggle">
-                            <span class="material-symbols-outlined">help</span>
+                            <span class="material-symbols-outlined">shopping_cart</span>
                             <span class="texto">Compras</span>
-                            <span class="material-symbols-outlined flecha-dropdown" id="flechaDropdown">expand_more</span>
+                            <span class="material-symbols-outlined flecha-dropdown">expand_more</span>
                         </a>
                         <ul class="dropdown hide" id="comprasDropdown">
-                            <li><a href="">Registrar Compra</a></li>
-                            <li><a href="">Proveedores</a></li>
+                            <li><a href="{{ url_for('nueva_compra') }}">Registrar Compra</a></li>
+                            <li><a href="{{ url_for('compras_listado') }}">Compras Realizadas</a></li>
+                            <li><a href="{{ url_for('proveedores') }}">Proveedores</a></li>
                         </ul>
                     </li>
 
@@ -69,7 +72,7 @@
                             <span class="material-symbols-outlined flecha-dropdown" id="flechaDropdown">expand_more</span>
                         </a>
                         <ul class="dropdown hide" id="almacenDropdown">
-                            <li><a href="">Productos</a></li>
+                            <li><a href="{{ url_for('almacen') }}">Almacen</a></li>
                             <li><a href="">Stock</a></li>
                         </ul>
                     </li>

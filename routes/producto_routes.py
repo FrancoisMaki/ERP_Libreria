@@ -25,3 +25,23 @@ def listar_productos():
     finally:
         cursor.close()
         conn.close() 
+
+@producto_bp.route('/productos/buscar', methods=['GET'])
+def buscar_productos():
+    q = request.args.get('q', '').strip()
+    if not q:
+        return jsonify({"productos": []})
+    conn = get_connection()
+    try:
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("""
+            SELECT isbn, titulo, precio, stock, fecha_publicacion, estado, imagen_url
+            FROM producto
+            WHERE isbn LIKE %s OR titulo LIKE %s
+            LIMIT 10
+        """, (f"%{q}%", f"%{q}%"))
+        productos = cursor.fetchall()
+        return jsonify({"productos": productos})
+    finally:
+        cursor.close()
+        conn.close()

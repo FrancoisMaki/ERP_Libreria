@@ -131,31 +131,21 @@ def actualizar_proveedor():
         conn.close()
 
 @proveedor_bp.route('/proveedores/buscar', methods=['GET'])
-@login_required_api
-def buscar_proveedor():
-    nombre = request.args.get('nombre', '').strip()
-    if not nombre:
-        return jsonify({"error": "Debe proporcionar un nombre"}), 400
-
+def buscar_proveedores():
+    q = request.args.get('q', '').strip()
+    if not q:
+        return jsonify({"proveedores": []})
     conn = get_connection()
-    if conn is None:
-        return jsonify({"error": "No se pudo conectar a la base de datos"}), 500
-
     try:
         cursor = conn.cursor(dictionary=True)
         cursor.execute("""
-            SELECT id_proveedor, nombre, cif, direccion, poblacionid, email, telefono
+            SELECT id_proveedor, nombre, cif, email, telefono
             FROM proveedor
-            WHERE UPPER(nombre) LIKE CONCAT(UPPER(%s), '%%')
-            LIMIT 1
-        """, (nombre,))
-        proveedor = cursor.fetchone()
-        if not proveedor:
-            return jsonify({"error": "Proveedor no encontrado"}), 404
-        return jsonify(proveedor)
-    except Exception as e:
-        print(f"❌ Error en búsqueda: {e}")
-        return jsonify({"error": "Error en la búsqueda"}), 500
+            WHERE nombre LIKE %s OR cif LIKE %s
+            ORDER BY nombre ASC LIMIT 20
+        """, (f"%{q}%", f"%{q}%"))
+        proveedores = cursor.fetchall()
+        return jsonify({"proveedores": proveedores})
     finally:
         cursor.close()
         conn.close()

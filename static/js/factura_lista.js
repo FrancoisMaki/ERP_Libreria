@@ -204,8 +204,7 @@ function cargarPagos(id_cabfac, totalFactura, panel) {
 }
 
 function imprimirFactura(panel, cabecera) {
-    // --- Personaliza aquí los datos de la empresa y logo ---
-    const logoUrl = "/static/img/logo_empresa.png"; // Cambia la ruta si tu logo está en otro sitio
+    const logoUrl = "/static/img/entre_lineas_logo_normal_v2.webp"; // Cambia la ruta si tu logo está en otro sitio
     const empresaNombre = "Entre Líneas";
     const empresaDireccion = "Calle de la Lectura 123, Ciudad, País";
     const empresaTelefono = "+34 600 123 456";
@@ -229,7 +228,7 @@ function imprimirFactura(panel, cabecera) {
     const contenido = `
         <div style="margin-bottom:32px;display:flex;align-items:center;gap:26px;">
             <div>
-                <img src="{{ url_for('static', filename='img/entre_lineas_icon_normal.webp') }}" style="max-height:80px;max-width:230px;">
+                <img src="${logoUrl}" style="max-height:80px;max-width:230px;">
             </div>
             <div style="font-size:1.09em;">
                 <b>${empresaNombre}</b><br>

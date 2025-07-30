@@ -5,6 +5,7 @@ body {
     display: flex;
 }
 
+/* SIDEBAR */
 .sidebar {
     background: #000;
     color: #fff;
@@ -80,6 +81,7 @@ body {
     width: auto;
 }
 
+/* MAIN CONTENT */
 .main-content {
     flex: 1;
     padding: 0 3vw;
@@ -87,6 +89,7 @@ body {
     background: #fff;
 }
 
+/* Barra superior y usuario */
 .barra-titulo {
     display: flex;
     justify-content: flex-end;
@@ -114,6 +117,8 @@ body {
 
 .contenido {
     padding: 30px 0 0 0;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .banner {
@@ -190,7 +195,7 @@ body {
 }
 
 /* ------------------ FORMULARIOS CRUD ------------------ */
-.form-container {
+.form-container, #almacenFormSection, #movimientoFormSection {
     background: #fafafa;
     border-radius: 8px;
     box-shadow: 0 3px 10px #0001;
@@ -198,12 +203,12 @@ body {
     max-width: 460px;
     margin: 35px auto 0 auto;
 }
-.form-container h3 {
+.form-container h3, #almacenFormSection h3, #movimientoFormSection h3 {
     margin-top: 0;
     margin-bottom: 12px;
     color: #222;
 }
-.form-container label {
+.form-container label, #almacenFormSection label, #movimientoFormSection label {
     display: block;
     margin-bottom: 4px;
     font-weight: 500;
@@ -211,7 +216,10 @@ body {
 }
 .form-container input,
 .form-container button[type="submit"],
-.form-container button[type="button"] {
+.form-container button[type="button"],
+#almacenFormSection input, #movimientoFormSection input,
+#almacenFormSection select, #movimientoFormSection select,
+#almacenFormSection button, #movimientoFormSection button {
     width: 100%;
     padding: 8px;
     margin-bottom: 16px;
@@ -220,7 +228,7 @@ body {
     font-size: 1em;
     box-sizing: border-box;
 }
-.form-container button[type="submit"] {
+.form-container button[type="submit"], #almacenFormSection button[type="submit"], #movimientoFormSection button[type="submit"] {
     background: #007BFF;
     color: white;
     border: none;
@@ -228,10 +236,10 @@ body {
     cursor: pointer;
     transition: background 0.2s;
 }
-.form-container button[type="submit"]:hover {
+.form-container button[type="submit"]:hover, #almacenFormSection button[type="submit"]:hover, #movimientoFormSection button[type="submit"]:hover {
     background: #0056b3;
 }
-.form-container button[type="button"] {
+.form-container button[type="button"], #almacenFormSection button[type="button"], #movimientoFormSection button[type="button"] {
     background: #c32f2f;
     color: white;
     border: none;
@@ -239,8 +247,12 @@ body {
     cursor: pointer;
     transition: background 0.2s;
 }
-.form-container button[type="button"]:hover {
+.form-container button[type="button"]:hover, #almacenFormSection button[type="button"]:hover, #movimientoFormSection button[type="button"]:hover {
     background: #a32020;
+}
+
+#almacenFormSection div, #movimientoFormSection div {
+    margin-bottom: 12px;
 }
 
 /* Ocultar formularios/tablas */
@@ -273,6 +285,7 @@ body {
     background: #0056b3;
 }
 
+/* RESPONSIVE */
 @media (max-width: 900px) {
     .sidebar.expanded {
         width: 160px;
@@ -283,7 +296,7 @@ body {
     .banner {
         max-width: 90vw;
     }
-    .form-container {
+    .form-container, #almacenFormSection, #movimientoFormSection {
         max-width: 95vw;
         padding: 14px 5vw;
     }
@@ -327,7 +340,7 @@ body {
     .main-content {
         margin-top: 56px;
     }
-    .form-container {
+    .form-container, #almacenFormSection, #movimientoFormSection {
         padding: 8px 2vw;
     }
     .tabla-container {
@@ -383,198 +396,4 @@ body {
 
 .sidebar.contraido .flecha-dropdown {
     display: none !important;
-}
-
-#facturaId {
-    display: none;
-}
-
-.factura-form {
-    max-width: 700px;
-    margin: 35px auto 0 auto;
-    padding: 32px 34px 28px 34px;
-}
-.factura-title {
-    text-align: center;
-    margin-bottom: 24px;
-    color: #007BFF;
-    font-size: 2em;
-    letter-spacing: 1px;
-}
-.row-flex {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    margin-bottom: 18px;
-}
-.form-group {
-    flex: 1 1 220px;
-    min-width: 170px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-.input-nif {
-    width: 100%;
-    box-sizing: border-box;
-}
-.tabla-factura input, .tabla-factura select {
-    width: 98%;
-    min-width: 40px;
-    box-sizing: border-box;
-    padding: 4px 6px;
-    font-size: 1em;
-}
-.tabla-factura td, .tabla-factura th {
-    vertical-align: middle;
-}
-.tabla-factura .autocomplete-list {
-    min-width: 180px;
-}
-.agregar-btn {
-    background: #c32f2f !important;
-    color: #fff;
-    width: 100%;
-    margin-top: 13px;
-    font-size: 1.1em;
-}
-.total-row {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-top: 24px;
-    margin-bottom: 6px;
-    font-size: 1.13em;
-    font-weight: bold;
-    gap: 8px;
-}
-.total-num {
-    color: #007BFF;
-    font-weight: bold;
-    font-size: 1.15em;
-}
-.guardar-btn {
-    width: 100%;
-    font-size: 1.15em;
-    margin-top: 12px;
-    background: #007BFF !important;
-    color: #fff;
-    border: none;
-}
-@media (max-width: 700px) {
-    .factura-form { padding: 16px 3vw 16px 3vw; }
-    .row-flex { gap: 10px; }
-}
-
-/* ---- AUTOCOMPLETE LISTA FINAL ---- */
-.autocomplete-list {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    z-index: 150;
-    background: #fff;
-    border: 1px solid #ccc;
-    width: 100%;
-    min-width: 120px;
-    max-width: 350px;
-    max-height: 180px;
-    overflow-y: auto;
-    box-shadow: 0 2px 8px #0002;
-    border-radius: 0 0 8px 8px;
-    font-size: 0.98em;
-    margin-top: 2px; /* Espacio pequeño debajo del input */
-    padding: 0;
-}
-.autocomplete-list div {
-    padding: 7px 14px;
-    cursor: pointer;
-    border-bottom: 1px solid #f0f0f0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.autocomplete-list div:last-child {
-    border-bottom: none;
-}
-.autocomplete-list div:hover,
-.autocomplete-list .active {
-    background: #007BFF;
-    color: #fff;
-}
-
-.factura-main-panel {
-    display: flex;
-    gap: 32px;
-    min-height: 540px;
-}
-.factura-list-panel {
-    width: 320px;
-    min-width: 200px;
-    background: #fafafa;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px #0001;
-    padding: 18px 14px 18px 14px;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-}
-.factura-buscador-input {
-    padding: 6px 10px;
-    font-size: 1em;
-    border: 1px solid #bbb;
-    border-radius: 6px;
-    margin-bottom: 14px;
-    width: 100%;
-    box-sizing: border-box;
-}
-.factura-lista {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    overflow-y: auto;
-    max-height: 68vh;
-}
-.factura-lista li {
-    padding: 8px 7px 7px 7px;
-    border-bottom: 1px solid #eee;
-    cursor: pointer;
-    transition: background 0.15s;
-    font-size: 1em;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-.factura-lista li.selected,
-.factura-lista li:hover {
-    background: #e6f0fa;
-}
-.factura-lista .factura-lista-main {
-    font-weight: bold;
-    color: #222;
-}
-.factura-lista .factura-lista-sec {
-    font-size: 0.97em;
-    color: #555;
-}
-.factura-lista .factura-lista-fecha {
-    font-size: 0.93em;
-    color: #888;
-}
-.factura-detalle-panel {
-    flex: 1;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px #0002;
-    padding: 22px 34px 28px 34px;
-    min-width: 320px;
-    max-width: 900px;
-}
-@media (max-width: 900px) {
-    .factura-main-panel {
-        flex-direction: column;
-        gap: 18px;
-    }
-    .factura-list-panel,
-    .factura-detalle-panel { max-width: 95vw; }
 }

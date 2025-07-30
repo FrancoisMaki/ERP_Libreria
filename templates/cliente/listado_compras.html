@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Compras realizadas{% endblock %}
+{% block content %}
+<div class="contenido">
+  <h2>Compras realizadas</h2>
+  <table class="tabla-paises tabla-factura">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Fecha</th>
+        <th>Proveedor</th>
+        <th>Total</th>
+        <th>Moneda</th>
+        <th>Detalle</th>
+      </tr>
+    </thead>
+    <tbody id="tbodyCompras"></tbody>
+  </table>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/listado_compra.js') }}"></script>
+{% endblock %}

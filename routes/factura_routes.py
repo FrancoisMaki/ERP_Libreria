@@ -228,7 +228,6 @@ def agregar_pago(id_cabfac):
         cursor.close()
         conn.close()
 
-# ...lo anterior igual...
 # Crear factura (cabfac + linfac + pago inicial opcional)
 @factura_bp.route('/facturas/', methods=['POST'])
 @login_required_api
@@ -285,4 +284,26 @@ def crear_factura():
     finally:
         cursor.close()
         conn.close()
-# ...lo demás igual...
+
+@factura_bp.route('/facturas/buscar', methods=['GET'])
+@login_required_api
+def buscar_facturas():
+    q = request.args.get('q', '').strip()
+    if not q:
+        return jsonify({"facturas": []})
+    conn = get_connection()
+    try:
+        cursor = conn.cursor(dictionary=True)
+        # Busca por id_cabfac exacto o parcial, nombre cliente o NIF
+        cursor.execute("""
+            SELECT cf.id_cabfac, cl.nombre as cliente_nombre, cl.nif as cliente_nif, cf.fecha
+            FROM cabfac cf
+            INNER JOIN cliente cl ON cf.id_cliente = cl.id_cliente
+            WHERE cf.id_cabfac LIKE %s OR cl.nombre LIKE %s OR cl.nif LIKE %s
+            ORDER BY cf.id_cabfac DESC LIMIT 15
+        """, (f"%{q}%", f"%{q}%", f"%{q}%"))
+        facturas = cursor.fetchall()
+        return jsonify({"facturas": facturas})
+    finally:
+        cursor.close()
+        conn.close()

@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Nueva Compra{% endblock %}
+{% block content %}
+<div class="contenido">
+  <div class="form-container">
+    <h2 class="factura-title">Nueva Compra</h2>
+    <form id="compraForm" autocomplete="off">
+      <div class="row-flex">
+        <div class="form-group">
+          <label>Proveedor:</label>
+          <input type="text" id="proveedorInput" required placeholder="Buscar proveedor...">
+          <div id="proveedorSugerencias" class="autocomplete-list"></div>
+          <input type="hidden" id="id_proveedor" name="id_proveedor">
+        </div>
+        <div class="form-group">
+          <label>Almacén:</label>
+          <input type="text" id="almacenInput" required placeholder="Buscar almacén...">
+          <div id="almacenSugerencias" class="autocomplete-list"></div>
+          <input type="hidden" id="id_almacen" name="id_almacen">
+        </div>
+        <div class="form-group">
+          <label>Fecha:</label>
+          <input type="date" id="fecha" name="fecha" required value="{{ fecha_hoy }}">
+        </div>
+        <div class="form-group">
+          <label>Moneda:</label>
+          <input type="text" id="moneda" value="EUR" maxlength="3" required>
+        </div>
+      </div>
+      <h3>Líneas de productos</h3>
+      <div class="tabla-factura-wrapper">
+        <table id="tablaLineasCompra" class="tabla-paises tabla-factura">
+          <thead>
+            <tr>
+              <th>ISBN</th>
+              <th>Título</th>
+              <th>Cantidad</th>
+              <th>Precio Unitario</th>
+              <th>Subtotal</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody id="tbodyLineasCompra"></tbody>
+        </table>
+      </div>
+      <button type="button" id="agregarLineaBtn" class="crud-buttons agregar-btn">
+        <span class="material-symbols-outlined">add</span>
+        Agregar Línea
+      </button>
+      <div class="total-row">
+        <span>Total: </span>
+        <span id="totalCompra" class="total-num">0.00</span>
+      </div>
+      <button type="submit" class="crud-buttons guardar-btn">
+        <span class="material-symbols-outlined">save</span>
+        Guardar Compra
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/compras.css') }}">
+<script src="{{ url_for('static', filename='js/compra.js') }}"></script>
+{% endblock %}

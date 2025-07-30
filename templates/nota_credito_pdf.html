@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Nota de Crédito #{{ cabecera.id_nota_credito }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        h1 { font-size: 1.5em; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid #bbb; padding: 8px; }
+        th { background: #eee; }
+        .totales { text-align: right; }
+    </style>
+</head>
+<body>
+    <h1>Nota de Crédito #{{ cabecera.id_nota_credito }}</h1>
+    <p><b>Fecha:</b> {{ cabecera.fecha }}</p>
+    <p><b>Factura Original:</b> #{{ cabecera.id_cabfac }}</p>
+    <p><b>Cliente:</b> {{ cabecera.cliente_nombre }} ({{ cabecera.nif }})</p>
+    <p><b>Dirección:</b> {{ cabecera.cliente_direccion }}</p>
+    <hr>
+    <h2>Líneas</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for l in lineas %}
+            <tr>
+                <td>{{ l.titulo }} ({{ l.id_producto }})</td>
+                <td>{{ l.cantidad }}</td>
+                <td>{{ "%.2f"|format(l.precio_unitario) }} {{ cabecera.moneda }}</td>
+                <td>{{ "%.2f"|format(l.cantidad * l.precio_unitario) }} {{ cabecera.moneda }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h2 class="totales">Total: {{ "%.2f"|format(cabecera.total) }} {{ cabecera.moneda }}</h2>
+    <hr>
+    <h3>Motivo:</h3>
+    <p>{{ cabecera.motivo }}</p>
+</body>
+</html>

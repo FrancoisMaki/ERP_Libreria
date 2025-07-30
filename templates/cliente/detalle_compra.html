@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Detalle de Compra{% endblock %}
+{% block content %}
+<div class="contenido">
+  <h2>Detalle de Compra</h2>
+  <div id="detalleCompra"></div>
+  <a href="/compras" class="crud-buttons">Volver al listado</a>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/detalle_compra.js') }}"></script>
+{% endblock %}

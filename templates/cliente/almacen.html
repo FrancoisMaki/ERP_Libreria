@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% block title %}Gestión de Almacenes{% endblock %}
+{% block content %}
+<div class="contenido">
+
+  <h2>Gestión de Almacenes</h2>
+  <div style="display:flex; gap:16px; margin-bottom:22px;">
+    <button class="crud-buttons" onclick="toggleSeccion('almacenFormSection')">➕ Nuevo Almacén</button>
+    <button class="crud-buttons" onclick="toggleSeccion('tablaAlmacenesSection')">📋 Lista Almacenes</button>
+    <button class="crud-buttons" onclick="toggleSeccion('movimientoFormSection')">➕ Movimiento Stock</button>
+    <button class="crud-buttons" onclick="toggleSeccion('tablaMovimientosSection')">📦 Movimientos</button>
+    <button class="crud-buttons" onclick="toggleSeccion('tablaStockSection')">📊 Ver Stock</button>
+  </div>
+
+  <div id="almacenFormSection" style="display:none;">
+    <h3 id="almacenFormTitle">Nuevo Almacén</h3>
+    <form id="almacenForm">
+      <input type="hidden" id="almacenId">
+      <div>
+        <label for="nombreAlmacen">Nombre:</label>
+        <input type="text" id="nombreAlmacen" required>
+      </div>
+      <div>
+        <label for="direccionAlmacen">Dirección:</label>
+        <input type="text" id="direccionAlmacen">
+      </div>
+      <div>
+        <label for="poblacionAlmacen">Población:</label>
+        <input type="text" id="poblacionAlmacen">
+      </div>
+      <button type="submit" class="crud-buttons">Guardar</button>
+      <button type="button" id="cancelarAlmacen" class="crud-buttons" style="display:none;">Cancelar</button>
+    </form>
+  </div>
+
+  <div id="tablaAlmacenesSection" style="display:none;">
+    <h3>Lista de almacenes</h3>
+    <table class="tabla-paises" id="tablaAlmacenes">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Dirección</th>
+          <th>Población</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div id="movimientoFormSection" style="display:none;">
+    <h3>Registrar Movimiento</h3>
+    <form id="movimientoForm">
+      <div>
+        <label for="movimientoProducto">Producto (ISBN):</label>
+        <input type="text" id="movimientoProducto" required>
+      </div>
+      <div>
+        <label for="movimientoAlmacen">Almacén (ID):</label>
+        <input type="number" id="movimientoAlmacen" required>
+      </div>
+      <div>
+        <label for="movimientoCantidad">Cantidad:</label>
+        <input type="number" id="movimientoCantidad" required>
+      </div>
+      <div>
+        <label for="movimientoTipo">Tipo:</label>
+        <select id="movimientoTipo">
+          <option value="entrada">Entrada</option>
+          <option value="salida">Salida</option>
+        </select>
+      </div>
+      <div>
+        <label for="movimientoFecha">Fecha:</label>
+        <input type="date" id="movimientoFecha" value="{{ fecha_hoy }}">
+      </div>
+      <button type="submit" class="crud-buttons">Registrar</button>
+    </form>
+  </div>
+
+  <div id="tablaMovimientosSection" style="display:none;">
+    <h3>Movimientos recientes</h3>
+    <table class="tabla-paises" id="tablaMovimientos">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Fecha</th>
+          <th>Tipo</th>
+          <th>Cantidad</th>
+          <th>Producto</th>
+          <th>Almacén</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div id="tablaStockSection" style="display:none;">
+    <h3>Stock Actual</h3>
+    <button id="refreshStock" class="crud-buttons" style="margin-bottom: 10px;">Refrescar stock</button>
+    <table class="tabla-paises" id="tablaStock">
+      <thead>
+        <tr>
+          <th>Producto</th>
+          <th>ISBN</th>
+          <th>Almacén</th>
+          <th>Stock</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+</div>
+{% endblock %}
+{% block scripts %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/almacen.css') }}">
+<script src="{{ url_for('static', filename='js/almacen.js') }}"></script>
+{% endblock %}
